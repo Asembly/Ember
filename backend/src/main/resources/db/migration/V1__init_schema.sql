@@ -1,0 +1,117 @@
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    nickname VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE token (
+    id SERIAL PRIMARY KEY, 
+    token VARCHAR(255) UNIQUE,
+    token_type VARCHAR(50) NOT NULL,
+    revoked BOOLEAN NOT NULL DEFAULT FALSE,
+    expired BOOLEAN NOT NULL DEFAULT FALSE,
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE profile (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    current_xp NUMERIC(19, 2) NOT NULL DEFAULT 0.00,
+    level INT NOT NULL DEFAULT 1,
+    next_level_up NUMERIC(19, 2) NOT NULL DEFAULT 100.00,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE attribute (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    description VARCHAR(255) NOT NULL,
+    level_coefficient NUMERIC(10, 4) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE profile_attributes (
+    id BIGSERIAL PRIMARY KEY,
+    profile_id BIGINT NOT NULL REFERENCES profile(id) ON DELETE CASCADE,
+    attribute_id BIGINT NOT NULL REFERENCES attribute(id) ON DELETE CASCADE,
+    current_xp NUMERIC(19, 2) NOT NULL DEFAULT 0.00,
+    level INT NOT NULL DEFAULT 1,
+    next_level_up NUMERIC(19, 2) NOT NULL DEFAULT 100.00,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uk_profile_attribute UNIQUE (profile_id, attribute_id)
+);
+
+CREATE TABLE action (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    base_xp NUMERIC(10, 2) NOT NULL DEFAULT 10.00,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE action_attributes (
+    id BIGSERIAL PRIMARY KEY,
+    action_id BIGINT NOT NULL REFERENCES action(id) ON DELETE CASCADE,
+    attribute_id BIGINT NOT NULL REFERENCES attribute(id) ON DELETE CASCADE,
+    weight NUMERIC(10, 4) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uk_action_attribute UNIQUE (action_id, attribute_id)
+);
+
+CREATE TABLE tag (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    color VARCHAR(50) NOT NULL,
+    profile_id BIGINT REFERENCES profile(id) ON DELETE CASCADE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE task (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'OPEN',
+    difficulty VARCHAR(50) NOT NULL DEFAULT 'EASY',
+    deadline TIMESTAMP,
+    finished_at TIMESTAMP,
+    scheduled_at TIMESTAMP,
+    profile_id BIGINT NOT NULL REFERENCES profile(id) ON DELETE CASCADE,
+    action_id BIGINT REFERENCES action(id) ON DELETE SET NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE task_tags (
+    task_id BIGINT NOT NULL REFERENCES task(id) ON DELETE CASCADE,
+    tag_id BIGINT NOT NULL REFERENCES tag(id) ON DELETE CASCADE,
+    PRIMARY KEY (task_id, tag_id)
+);
+
+CREATE TABLE time_session (
+    id BIGSERIAL PRIMARY KEY,
+    task_id BIGINT NOT NULL REFERENCES task(id) ON DELETE CASCADE,
+    end_time TIMESTAMP,                 
+    duration_in_min BIGINT,              
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
+);
+
+CREATE TABLE achievement (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    description VARCHAR(255) NOT NULL,
+    need_to_achieve NUMERIC(19, 2) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE profile_achievements (
+    id BIGSERIAL PRIMARY KEY,
+    profile_id BIGINT NOT NULL REFERENCES profile(id) ON DELETE CASCADE,
+    achievement_id BIGINT NOT NULL REFERENCES achievement(id) ON DELETE CASCADE,
+    progress NUMERIC(19, 2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uk_profile_achievement UNIQUE (profile_id, achievement_id)
+);
