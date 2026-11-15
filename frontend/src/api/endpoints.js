@@ -39,6 +39,8 @@ export const profileApi = {
   list: () => client.get('/profile/get'),
   byId: (id) => client.get(`/profile/get/${id}`),
   attributes: (id) => client.get(`/profile/get/${id}/attribute`),
+  getLeaderboard: (page = 0, limit = 10) =>
+    client.get('/profile/get/leaderboard', { params: { page, limit } }),
 }
 
 export const taskApi = {

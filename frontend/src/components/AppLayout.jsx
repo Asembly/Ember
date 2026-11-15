@@ -5,6 +5,7 @@ import Toasts from './Toasts'
 import {
   AlertIcon,
   ArrowRightIcon,
+  CrownIcon,
   DashboardIcon,
   HistoryIcon,
   RefreshIcon,
@@ -22,6 +23,7 @@ const NAV_ITEMS = [
   { to: '/', label: 'Обзор', icon: DashboardIcon, end: true },
   { to: '/tasks', label: 'Задачи', icon: TasksIcon },
   { to: '/achievements', label: 'Достижения', icon: TrophyIcon },
+  { to: '/leaderboard', label: 'Лидерборд', icon: CrownIcon },
   { to: '/history', label: 'История', icon: HistoryIcon },
 ]
 
@@ -29,6 +31,7 @@ const PAGE_META = {
   '/': { eyebrow: 'Панель', title: 'Обзор' },
   '/tasks': { eyebrow: 'Работа', title: 'Задачи' },
   '/achievements': { eyebrow: 'Прогресс', title: 'Достижения' },
+  '/leaderboard': { eyebrow: 'Рейтинг', title: 'Лидерборд' },
   '/history': { eyebrow: 'Активность', title: 'История' },
 }
 

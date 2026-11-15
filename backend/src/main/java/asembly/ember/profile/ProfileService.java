@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,6 +82,18 @@ public class ProfileService {
     @Transactional(readOnly = true)
     public Profile getReferenceById(Long id) {
         return profileRepository.getReferenceById(id);
+    }
+
+    public List<ProfileResponseDto> getLeaderBoard(Integer page, Integer size) {
+        Pageable top = PageRequest.of(page, size);
+        var profiles = profileRepository.findAllByLevel(top);
+
+        List<ProfileResponseDto> response = new ArrayList<>();
+        for (var p : profiles) {
+            response.add(profileMapper.toProfileResponseDto(p));
+        }
+
+        return response;
     }
 
     public boolean existsById(Long id) {

@@ -4,6 +4,7 @@ import AppLayout from './components/AppLayout'
 import Dashboard from './pages/Dashboard'
 import Tasks from './pages/Tasks'
 import Achievements from './pages/Achievements'
+import Leaderboard from './pages/Leaderboard'
 import History from './pages/History'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -78,6 +79,7 @@ export default function App() {
         <Route index element={<Dashboard />} />
         <Route path="tasks" element={<Tasks />} />
         <Route path="achievements" element={<Achievements />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="history" element={<History />} />
       </Route>
 

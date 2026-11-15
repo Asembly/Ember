@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import asembly.ember.profile.dto.ProfileResponseDto;
@@ -37,6 +38,13 @@ public class ProfileController {
     @GetMapping("/get/{id}/attribute")
     public ResponseEntity<List<StatResponseDto>> getAttributesByProfileId(@PathVariable("id") Long profileId) {
         return ResponseEntity.ok(profileAttributeService.getAttributesByProfileId(profileId));
+    }
+
+    @GetMapping("/get/leaderboard")
+    public ResponseEntity<List<ProfileResponseDto>> getLeaderBoard(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer limit) {
+        return ResponseEntity.ok(profileService.getLeaderBoard(page, limit));
     }
 
 }
