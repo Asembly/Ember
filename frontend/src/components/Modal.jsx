@@ -44,7 +44,7 @@ export default function Modal({
         onClick={closeOnBackdrop ? onClose : undefined}
       />
 
-      <div className={`card relative z-10 w-full ${width} animate-fade-up shadow-panel`}>
+      <div className={`card relative z-10 w-full ${width} animate-fade-up shadow-theme`}>
         <div className="flex items-start justify-between gap-4 border-b border-line px-6 py-4">
           <div className="min-w-0">
             <h2 className="section-title text-[15px] text-ink">{title}</h2>

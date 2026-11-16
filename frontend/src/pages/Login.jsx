@@ -58,7 +58,12 @@ export default function Login() {
         </>
       }
     >
-      <form onSubmit={handleSubmit} className="mt-5 space-y-3.5" noValidate>
+      <form
+        onSubmit={handleSubmit}
+        className="mt-5 flex flex-col"
+        style={{ gap: 'calc(var(--spacing, 0.75rem) * 1.1)' }}
+        noValidate
+      >
         <div>
           <label htmlFor="login-email" className="label">
             Почта
@@ -90,7 +95,7 @@ export default function Login() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary mt-2 w-full" disabled={busy}>
+        <button type="submit" className="btn btn-primary w-full" disabled={busy}>
           {busy ? 'Входим…' : 'Войти'}
         </button>
       </form>

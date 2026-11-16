@@ -22,14 +22,14 @@ export default function Toasts() {
         return (
           <div
             key={toast.id}
-            className="pointer-events-auto flex animate-toast-in items-start gap-2.5 rounded-xl border border-line px-3.5 py-3 shadow-pop"
+            className="pointer-events-auto flex animate-toast-in items-start gap-2.5 radius-theme border border-theme border-line px-3.5 py-3 shadow-theme"
             style={{ backgroundColor: 'var(--c-raised)' }}
           >
             <Icon size={16} className="mt-0.5 shrink-0" style={{ color: meta.color }} />
             <p className="min-w-0 flex-1 text-[12.5px] leading-snug text-ink">{toast.message}</p>
             <button
               type="button"
-              className="shrink-0 rounded-md p-0.5 text-muted transition hover:text-ink"
+              className="shrink-0 radius-theme p-0.5 text-muted transition hover:text-ink"
               onClick={() => dismiss(toast.id)}
               aria-label="Скрыть"
             >

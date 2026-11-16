@@ -113,7 +113,7 @@ export default function LibraryModal({
               {actions.map((action) => (
                 <li
                   key={action.id}
-                  className="rounded-xl border border-line px-3 py-2.5"
+                  className="radius-theme border border-line px-3 py-2.5"
                   style={{ backgroundColor: 'var(--c-canvas)' }}
                 >
                   <div className="flex items-center gap-2">
@@ -181,7 +181,7 @@ export default function LibraryModal({
                         type="button"
                         onClick={() => toggle(attribute.attributeId)}
                         aria-pressed={active}
-                        className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition"
+                        className="inline-flex items-center gap-1.5 radius-theme border px-2.5 py-1 text-[11px] font-medium transition"
                         style={{
                           borderColor: active ? 'transparent' : 'var(--c-line)',
                           backgroundColor: active ? `${color}22` : 'transparent',
@@ -203,7 +203,7 @@ export default function LibraryModal({
 
           {error ? (
             <p
-              className="mt-3 flex items-start gap-2 rounded-xl px-3 py-2 text-[11.5px] leading-snug"
+              className="mt-3 flex items-start gap-2 radius-theme px-3 py-2 text-[11.5px] leading-snug"
               style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-negative)' }}
             >
               <AlertIcon size={14} className="mt-0.5 shrink-0" />

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import AppLayout from './components/AppLayout'
 import Dashboard from './pages/Dashboard'
@@ -9,6 +9,7 @@ import History from './pages/History'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import { setUnauthorizedHandler } from './api/client'
+import { applyTheme } from './config/themes'
 import { useAuthStore } from './stores/authStore'
 import { useThemeStore } from './stores/themeStore'
 
@@ -36,11 +37,11 @@ function PublicOnly({ children }) {
 }
 
 export default function App() {
-  const theme = useThemeStore((state) => state.theme)
+  const currentThemeId = useThemeStore((state) => state.currentThemeId)
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme
-  }, [theme])
+  useLayoutEffect(() => {
+    applyTheme(currentThemeId)
+  }, [currentThemeId])
 
   useEffect(() => {
     setUnauthorizedHandler(() => {

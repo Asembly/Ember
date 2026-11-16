@@ -147,7 +147,7 @@ export default function History() {
                 type="button"
                 onClick={() => setRange(item.id)}
                 aria-pressed={active}
-                className="rounded-lg border px-2.5 py-1.5 text-[11px] font-medium transition"
+                className="radius-theme border px-2.5 py-1.5 text-[11px] font-medium transition"
                 style={{
                   borderColor: active ? 'transparent' : 'var(--c-line)',
                   backgroundColor: active ? 'var(--c-accent)' : 'transparent',
@@ -208,7 +208,7 @@ export default function History() {
                     </h2>
                     {group.date && isToday(group.date) ? (
                       <span
-                        className="rounded-full px-2 py-[2px] text-[9.5px] font-semibold uppercase tracking-[0.12em]"
+                        className="radius-theme px-2 py-[2px] text-[9.5px] font-semibold uppercase tracking-[0.12em]"
                         style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-accent)' }}
                       >
                         Сегодня
@@ -237,7 +237,7 @@ export default function History() {
                         className="flex items-center gap-3 border-b border-line px-5 py-3 last:border-b-0"
                       >
                         <div
-                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                          className="flex h-8 w-8 shrink-0 items-center justify-center radius-theme"
                           style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-accent)' }}
                         >
                           <TimerIcon size={14} />

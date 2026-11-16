@@ -49,23 +49,25 @@ export default function Achievements() {
   return (
     <div className="space-y-4">
       <section
-        className="border-4 p-5"
+        className="border p-5"
         style={{
           borderColor: 'var(--c-ink)',
-          borderRadius: '1.5rem',
+          borderWidth: 'var(--border-width, 1px)',
+          borderRadius: 'var(--radius, 8px)',
           backgroundColor: 'var(--c-surface)',
-          boxShadow: '6px 6px 0 var(--c-ink)',
+          boxShadow: 'var(--shadow)',
         }}
       >
         <div className="flex flex-wrap items-start gap-4">
           <div
-            className="flex h-14 w-14 shrink-0 -rotate-6 items-center justify-center border-4"
+            className="flex h-14 w-14 shrink-0 -rotate-6 items-center justify-center border"
             style={{
               borderColor: 'var(--c-ink)',
-              borderRadius: '1rem',
+              borderWidth: 'var(--border-width, 1px)',
+              borderRadius: 'var(--radius, 8px)',
               backgroundColor: 'var(--c-accent)',
               color: 'var(--c-accent-ink)',
-              boxShadow: '3px 3px 0 var(--c-ink)',
+              boxShadow: 'var(--shadow)',
             }}
           >
             <TrophyIcon size={26} />
@@ -115,10 +117,11 @@ export default function Achievements() {
             return (
               <div
                 key={card.label}
-                className="flex items-center gap-2.5 border-2 px-3 py-2"
+                className="flex items-center gap-2.5 border px-3 py-2"
                 style={{
                   borderColor: 'var(--c-ink)',
-                  borderRadius: '0.9rem',
+                  borderWidth: 'var(--border-width, 1px)',
+                  borderRadius: 'var(--radius, 8px)',
                   backgroundColor: 'var(--c-canvas)',
                 }}
               >
@@ -137,12 +140,13 @@ export default function Achievements() {
 
       {closest ? (
         <section
-          className="flex flex-wrap items-center gap-3 border-4 px-4 py-3"
+          className="flex flex-wrap items-center gap-3 border px-4 py-3"
           style={{
             borderColor: 'var(--c-ink)',
-            borderRadius: '1.2rem',
+            borderWidth: 'var(--border-width, 1px)',
+            borderRadius: 'var(--radius, 8px)',
             backgroundColor: 'var(--c-accent-soft)',
-            boxShadow: '4px 4px 0 var(--c-ink)',
+            boxShadow: 'var(--shadow)',
           }}
         >
           <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-muted">
@@ -169,13 +173,14 @@ export default function Achievements() {
               type="button"
               onClick={() => setFilter(item.id)}
               aria-pressed={active}
-              className="border-2 px-3 py-1.5 text-[11px] font-bold transition"
+              className="border px-3 py-1.5 text-[11px] font-bold transition"
               style={{
                 borderColor: 'var(--c-ink)',
-                borderRadius: '999px',
+                borderWidth: 'var(--border-width, 1px)',
+                borderRadius: 'var(--radius, 8px)',
                 backgroundColor: active ? 'var(--c-accent)' : 'transparent',
                 color: active ? 'var(--c-accent-ink)' : 'var(--c-muted)',
-                boxShadow: active ? '2px 2px 0 var(--c-ink)' : 'none',
+                boxShadow: active ? 'var(--shadow)' : 'none',
               }}
             >
               {item.label}
@@ -196,10 +201,11 @@ export default function Achievements() {
 
       {error ? (
         <div
-          className="flex items-start gap-2 border-2 px-3 py-2 text-[11.5px] font-semibold"
+          className="flex items-start gap-2 border px-3 py-2 text-[11.5px] font-semibold"
           style={{
             borderColor: 'var(--c-ink)',
-            borderRadius: '0.9rem',
+            borderWidth: 'var(--border-width, 1px)',
+            borderRadius: 'var(--radius, 8px)',
             backgroundColor: 'var(--c-accent-soft)',
             color: 'var(--c-negative)',
           }}
@@ -215,10 +221,11 @@ export default function Achievements() {
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
-              className="h-[132px] animate-pulse border-2"
+              className="h-[132px] animate-pulse border"
               style={{
                 borderColor: 'var(--c-line)',
-                borderRadius: '1rem',
+                borderWidth: 'var(--border-width, 1px)',
+                borderRadius: 'var(--radius, 8px)',
                 backgroundColor: 'var(--c-surface)',
               }}
             />
@@ -226,12 +233,13 @@ export default function Achievements() {
         </div>
       ) : visible.length === 0 ? (
         <div
-          className="border-4 px-5 py-8 text-center"
+          className="border px-5 py-8 text-center"
           style={{
             borderColor: 'var(--c-ink)',
-            borderRadius: '1.5rem',
+            borderWidth: 'var(--border-width, 1px)',
+            borderRadius: 'var(--radius, 8px)',
             backgroundColor: 'var(--c-surface)',
-            boxShadow: '6px 6px 0 var(--c-ink)',
+            boxShadow: 'var(--shadow)',
           }}
         >
           <p className="text-[13px] font-bold">

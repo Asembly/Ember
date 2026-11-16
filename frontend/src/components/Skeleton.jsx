@@ -1,4 +1,4 @@
-export default function Skeleton({ className = '', rounded = 'rounded-xl' }) {
+export default function Skeleton({ className = '', rounded = 'radius-theme' }) {
   return (
     <div
       className={`animate-pulse ${rounded} ${className}`}

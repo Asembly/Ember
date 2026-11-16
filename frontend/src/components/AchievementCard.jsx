@@ -28,7 +28,7 @@ export default function AchievementCard({ achievement }) {
     >
       <div className="flex items-start gap-3">
         <div
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
+          className="flex h-11 w-11 shrink-0 items-center justify-center radius-theme border border-theme"
           style={{
             borderColor: unlocked ? `${tint}55` : 'var(--c-line)',
             backgroundColor: unlocked ? `${tint}1f` : 'var(--c-canvas)',

@@ -47,7 +47,7 @@ export default function TaskCard({
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-1.5">
             <span
-              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-[3px] text-[10.5px] font-semibold ${status.chip}`}
+              className={`inline-flex items-center gap-1.5 radius-theme border px-2.5 py-[3px] text-[10.5px] font-semibold ${status.chip}`}
             >
               <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} />
               {status.label}
@@ -55,7 +55,7 @@ export default function TaskCard({
 
             {running ? (
               <span
-                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-[3px] text-[10.5px] font-semibold"
+                className="inline-flex items-center gap-1.5 radius-theme px-2.5 py-[3px] text-[10.5px] font-semibold"
                 style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-accent)' }}
               >
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ backgroundColor: 'var(--c-accent)' }} />
@@ -75,7 +75,7 @@ export default function TaskCard({
 
         <div className="flex shrink-0 flex-col items-end gap-1">
           <div
-            className="flex items-center gap-1.5 rounded-xl border border-line px-2.5 py-1.5"
+            className="flex items-center gap-1.5 radius-theme border border-line px-2.5 py-1.5"
             style={{ backgroundColor: 'var(--c-raised)' }}
             title="Потенциальный опыт"
           >
@@ -90,14 +90,14 @@ export default function TaskCard({
 
       <div className="flex flex-wrap items-center gap-1.5">
         <span
-          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-[3px] text-[10.5px] font-semibold ${difficulty.chip}`}
+          className={`inline-flex items-center gap-1.5 radius-theme border px-2.5 py-[3px] text-[10.5px] font-semibold ${difficulty.chip}`}
         >
           {difficulty.label}
         </span>
 
         {deadline ? (
           <span
-            className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-[3px] text-[10.5px] font-medium"
+            className="inline-flex items-center gap-1.5 radius-theme border border-line px-2.5 py-[3px] text-[10.5px] font-medium"
             style={{ color: TONE_COLOR[deadline.tone] || 'var(--c-muted)' }}
           >
             <CalendarIcon size={11} />
@@ -106,7 +106,7 @@ export default function TaskCard({
         ) : null}
 
         {task.scheduledAt ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-[3px] text-[10.5px] font-medium text-muted">
+          <span className="inline-flex items-center gap-1.5 radius-theme border border-line px-2.5 py-[3px] text-[10.5px] font-medium text-muted">
             <ClockIcon size={11} />
             {formatDateTime(task.scheduledAt)}
           </span>
@@ -115,10 +115,11 @@ export default function TaskCard({
         {(task.tags || []).map((tag) => (
           <span
             key={`tag-${tag.id}`}
-            className="inline-flex items-center gap-1.5 border-2 px-2.5 py-[2px] text-[10.5px] font-bold"
+            className="inline-flex items-center gap-1.5 border px-2.5 py-[2px] text-[10.5px] font-bold"
             style={{
               borderColor: 'var(--c-ink)',
-              borderRadius: '999px',
+              borderWidth: 'var(--border-width, 1px)',
+              borderRadius: 'var(--radius, 8px)',
               backgroundColor: tag.hex,
               color: '#141018',
             }}
@@ -133,7 +134,7 @@ export default function TaskCard({
       <div className="mt-auto flex flex-wrap items-center justify-between gap-2.5 border-t border-line pt-3.5">
         <div className="flex items-center gap-2.5">
           <div
-            className="flex items-center gap-2 rounded-lg border border-line px-2.5 py-1.5"
+            className="flex items-center gap-2 radius-theme border border-line px-2.5 py-1.5"
             style={{ backgroundColor: 'var(--c-canvas)' }}
           >
             <TaskTimer startedAt={activeTimer?.startedAt} active={running} className="text-[13px] font-semibold" />

@@ -35,13 +35,13 @@ function LeaderboardSkeleton() {
     <div className="space-y-2.5" aria-busy="true" aria-label="Загружаем рейтинг">
       {Array.from({ length: 6 }).map((_, index) => (
         <div key={index} className="card flex items-center gap-3 px-4 py-3">
-          <Skeleton className="h-7 w-7 shrink-0" rounded="rounded-lg" />
-          <Skeleton className="h-9 w-9 shrink-0" rounded="rounded-lg" />
+          <Skeleton className="h-7 w-7 shrink-0" rounded="radius-theme" />
+          <Skeleton className="h-9 w-9 shrink-0" rounded="radius-theme" />
           <div className="min-w-0 flex-1 space-y-1.5">
-            <Skeleton className="h-3 w-32" rounded="rounded-md" />
-            <Skeleton className="h-2.5 w-20" rounded="rounded-md" />
+            <Skeleton className="h-3 w-32" rounded="radius-theme" />
+            <Skeleton className="h-2.5 w-20" rounded="radius-theme" />
           </div>
-          <Skeleton className="h-3 w-14 shrink-0" rounded="rounded-md" />
+          <Skeleton className="h-3 w-14 shrink-0" rounded="radius-theme" />
         </div>
       ))}
     </div>
@@ -65,7 +65,7 @@ export default function Leaderboard() {
     <div className="space-y-4">
       <section className="card flex flex-wrap items-center gap-3.5 px-4 py-3.5 sm:px-5">
         <span
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+          className="flex h-10 w-10 shrink-0 items-center justify-center radius-theme"
           style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-accent)' }}
         >
           <CrownIcon size={18} />
@@ -158,7 +158,7 @@ export default function Leaderboard() {
                     style={cardStyle(rank)}
                   >
                     <span
-                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[11.5px] font-semibold"
+                      className="flex h-7 w-7 shrink-0 items-center justify-center radius-theme text-[11.5px] font-semibold"
                       style={rankStyle(rank)}
                       aria-label={`Место ${rank}`}
                     >
@@ -166,7 +166,7 @@ export default function Leaderboard() {
                     </span>
 
                     <span
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[13px] font-semibold"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center radius-theme text-[13px] font-semibold"
                       style={
                         rank === 1
                           ? { backgroundColor: 'var(--c-accent)', color: 'var(--c-accent-ink)' }

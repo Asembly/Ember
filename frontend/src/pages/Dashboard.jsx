@@ -33,7 +33,7 @@ function StatTile({ icon, label, value, hint, tint }) {
   return (
     <div className="card flex items-center gap-3.5 p-4">
       <div
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+        className="flex h-10 w-10 shrink-0 items-center justify-center radius-theme"
         style={{ backgroundColor: `${tint}1f`, color: tint }}
       >
         {icon}
@@ -207,7 +207,7 @@ export default function Dashboard() {
                 return (
                   <li
                     key={task.id}
-                    className="flex items-center gap-3 rounded-xl px-2.5 py-2 transition hover:bg-accent-soft"
+                    className="flex items-center gap-3 radius-theme px-2.5 py-2 transition hover:bg-accent-soft"
                   >
                     <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${status.dot}`} />
                     <div className="min-w-0 flex-1">

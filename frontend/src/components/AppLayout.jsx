@@ -84,7 +84,7 @@ function BootScreen() {
         <div
           className="mx-auto flex h-12 w-12 animate-pulse items-center justify-center"
           style={{
-            borderRadius: '0.85rem',
+            borderRadius: 'var(--radius, 8px)',
             backgroundColor: 'var(--c-accent)',
             color: 'var(--c-accent-ink)',
           }}
@@ -134,7 +134,7 @@ export default function AppLayout() {
           <div
             className="mx-auto flex h-11 w-11 items-center justify-center"
             style={{
-              borderRadius: '0.75rem',
+              borderRadius: 'var(--radius, 8px)',
               backgroundColor: 'var(--c-accent-soft)',
               color: 'var(--c-accent)',
             }}
@@ -167,7 +167,7 @@ export default function AppLayout() {
           <div
             className="mx-auto flex h-11 w-11 items-center justify-center"
             style={{
-              borderRadius: '0.75rem',
+              borderRadius: 'var(--radius, 8px)',
               backgroundColor: 'color-mix(in srgb, var(--c-negative) 14%, transparent)',
               color: 'var(--c-negative)',
             }}
@@ -215,6 +215,7 @@ export default function AppLayout() {
         className="flex w-[248px] shrink-0 flex-col border-r px-3.5 py-5"
         style={{
           borderColor: 'var(--c-line)',
+          borderWidth: 'var(--border-width, 1px)',
           backgroundColor: 'var(--c-sidebar)',
         }}
       >
@@ -222,7 +223,7 @@ export default function AppLayout() {
           <span
             className="flex h-8 w-8 items-center justify-center"
             style={{
-              borderRadius: '0.65rem',
+              borderRadius: 'var(--radius, 8px)',
               backgroundColor: 'var(--c-accent)',
               color: 'var(--c-accent-ink)',
             }}
@@ -253,8 +254,9 @@ export default function AppLayout() {
                 <span className="flex-1">{item.label}</span>
                 {item.to === '/tasks' && activeCount > 0 ? (
                   <span
-                    className="rounded-full px-1.5 py-0.5 text-[10px] font-semibold"
+                    className="px-1.5 py-0.5 text-[10px] font-semibold"
                     style={{
+                      borderRadius: 'var(--radius, 8px)',
                       backgroundColor: 'var(--c-accent-soft)',
                       color: 'var(--c-accent)',
                     }}
@@ -268,18 +270,12 @@ export default function AppLayout() {
         </nav>
 
         <div className="mt-auto space-y-3">
-          <div
-            className="rounded-xl border p-3.5"
-            style={{
-              borderColor: 'var(--c-line)',
-              backgroundColor: 'var(--c-surface)',
-            }}
-          >
+          <div className="card p-3.5">
             <div className="flex items-center gap-2.5">
               <span
                 className="flex h-8 w-8 items-center justify-center text-[12px] font-semibold"
                 style={{
-                  borderRadius: '0.6rem',
+                  borderRadius: 'var(--radius, 8px)',
                   backgroundColor: 'var(--c-accent-soft)',
                   color: 'var(--c-accent)',
                 }}
@@ -315,7 +311,11 @@ export default function AppLayout() {
       <div className="flex min-w-0 flex-1 flex-col">
         <header
           className="flex h-[60px] shrink-0 items-center gap-4 border-b px-6"
-          style={{ borderColor: 'var(--c-line)', backgroundColor: 'var(--c-surface)' }}
+          style={{
+            borderColor: 'var(--c-line)',
+            borderWidth: 'var(--border-width, 1px)',
+            backgroundColor: 'var(--c-surface)',
+          }}
         >
           <div className="min-w-0">
             <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted">

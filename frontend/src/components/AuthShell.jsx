@@ -11,7 +11,7 @@ export default function AuthShell({ eyebrow, title, subtitle, children, footer, 
           <span
             className="flex h-10 w-10 items-center justify-center"
             style={{
-              borderRadius: '0.85rem',
+              borderRadius: 'var(--radius, 8px)',
               backgroundColor: 'var(--c-accent)',
               color: 'var(--c-accent-ink)',
             }}
@@ -26,7 +26,10 @@ export default function AuthShell({ eyebrow, title, subtitle, children, footer, 
           </div>
         </div>
 
-        <div className="card p-6">
+        <div
+          className="card"
+          style={{ padding: 'calc(var(--spacing, 0.75rem) * 1.8)' }}
+        >
           <h1 className="display text-[21px] font-semibold leading-tight text-ink">{title}</h1>
           <p className="mt-1.5 text-[12px] leading-relaxed text-muted">{subtitle}</p>
 
@@ -37,7 +40,8 @@ export default function AuthShell({ eyebrow, title, subtitle, children, footer, 
               className="mt-4 flex items-start gap-2 border px-3 py-2 text-[11.5px] font-medium leading-snug"
               style={{
                 borderColor: 'color-mix(in srgb, var(--c-negative) 32%, transparent)',
-                borderRadius: '0.65rem',
+                borderWidth: 'var(--border-width, 1px)',
+                borderRadius: 'var(--radius, 8px)',
                 backgroundColor: 'color-mix(in srgb, var(--c-negative) 12%, transparent)',
                 color: 'var(--c-negative)',
               }}

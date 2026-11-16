@@ -2,144 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ------------------------------------------------------------------
-   Theme tokens — flat pastel palettes, no gradients anywhere.
-   Three dark themes (deep desaturated backgrounds) + three light
-   themes (cream / mint / lavender) built from the same pastel accents.
-   ------------------------------------------------------------------ */
-
-:root,
-[data-theme='rose'] {
-  color-scheme: dark;
-  --c-canvas: #211c26;
-  --c-sidebar: #1a1620;
-  --c-surface: #282230;
-  --c-raised: #312a39;
-  --c-line: #3b3345;
-  --c-ink: #ece6f0;
-  --c-muted: #a396b0;
-  --c-accent: #d9b4cc;
-  --c-accent-strong: #c99fbc;
-  --c-accent-soft: rgba(217, 180, 204, 0.14);
-  --c-accent-ink: #241a22;
-  --c-positive: #a9cbb6;
-  --c-negative: #d9a3a7;
-  --c-warning: #dcc49a;
-  --c-glow: rgba(217, 180, 204, 0.16);
-  --c-glow-2: rgba(180, 160, 210, 0.12);
-  --c-shadow: rgba(0, 0, 0, 0.3);
-  --c-shadow-lg: rgba(0, 0, 0, 0.42);
-}
-
-[data-theme='mint'] {
-  color-scheme: dark;
-  --c-canvas: #1a211e;
-  --c-sidebar: #141a17;
-  --c-surface: #212a26;
-  --c-raised: #2a342f;
-  --c-line: #34403a;
-  --c-ink: #e6efe9;
-  --c-muted: #9aada3;
-  --c-accent: #a9cbb8;
-  --c-accent-strong: #93b8a4;
-  --c-accent-soft: rgba(169, 203, 184, 0.14);
-  --c-accent-ink: #16211c;
-  --c-positive: #a9cbb6;
-  --c-negative: #d5a5a5;
-  --c-warning: #d9c79b;
-  --c-glow: rgba(169, 203, 184, 0.16);
-  --c-glow-2: rgba(150, 195, 180, 0.1);
-  --c-shadow: rgba(0, 0, 0, 0.3);
-  --c-shadow-lg: rgba(0, 0, 0, 0.42);
-}
-
-[data-theme='lilac'] {
-  color-scheme: dark;
-  --c-canvas: #1e1c26;
-  --c-sidebar: #191722;
-  --c-surface: #262330;
-  --c-raised: #2f2b3a;
-  --c-line: #3a3546;
-  --c-ink: #ebe7f2;
-  --c-muted: #a49cba;
-  --c-accent: #bcb1d4;
-  --c-accent-strong: #a69ac6;
-  --c-accent-soft: rgba(188, 177, 212, 0.15);
-  --c-accent-ink: #1e1a29;
-  --c-positive: #a8c6b8;
-  --c-negative: #d3a4b0;
-  --c-warning: #d8c69e;
-  --c-glow: rgba(188, 177, 212, 0.16);
-  --c-glow-2: rgba(160, 150, 210, 0.1);
-  --c-shadow: rgba(0, 0, 0, 0.3);
-  --c-shadow-lg: rgba(0, 0, 0, 0.42);
-}
-
-[data-theme='cream'] {
-  color-scheme: light;
-  --c-canvas: #f5f0e8;
-  --c-sidebar: #ece5da;
-  --c-surface: #fdfaf5;
-  --c-raised: #f1eae0;
-  --c-line: #ded5c7;
-  --c-ink: #383129;
-  --c-muted: #8b8073;
-  --c-accent: #d3b49a;
-  --c-accent-strong: #c09d7d;
-  --c-accent-soft: rgba(211, 180, 154, 0.3);
-  --c-accent-ink: #2e2721;
-  --c-positive: #8fb79b;
-  --c-negative: #c08c8c;
-  --c-warning: #bfa06a;
-  --c-glow: rgba(211, 180, 154, 0.28);
-  --c-glow-2: rgba(190, 160, 130, 0.18);
-  --c-shadow: rgba(56, 49, 41, 0.07);
-  --c-shadow-lg: rgba(56, 49, 41, 0.12);
-}
-
-[data-theme='mist'] {
-  color-scheme: light;
-  --c-canvas: #eef3ef;
-  --c-sidebar: #e3ece6;
-  --c-surface: #fbfdfb;
-  --c-raised: #eaf1ec;
-  --c-line: #d2ded7;
-  --c-ink: #2c3a33;
-  --c-muted: #7d8d84;
-  --c-accent: #a3c7b4;
-  --c-accent-strong: #8ab69f;
-  --c-accent-soft: rgba(163, 199, 180, 0.3);
-  --c-accent-ink: #1f2c26;
-  --c-positive: #83ac92;
-  --c-negative: #bd8d92;
-  --c-warning: #b99f72;
-  --c-glow: rgba(163, 199, 180, 0.26);
-  --c-glow-2: rgba(140, 185, 170, 0.16);
-  --c-shadow: rgba(44, 58, 51, 0.07);
-  --c-shadow-lg: rgba(44, 58, 51, 0.12);
-}
-
-[data-theme='haze'] {
-  color-scheme: light;
-  --c-canvas: #f1eef7;
-  --c-sidebar: #e6e2f0;
-  --c-surface: #fcfbff;
-  --c-raised: #ece8f5;
-  --c-line: #d7d1e3;
-  --c-ink: #35303f;
-  --c-muted: #857e97;
-  --c-accent: #b7aad4;
-  --c-accent-strong: #a093c6;
-  --c-accent-soft: rgba(183, 170, 212, 0.3);
-  --c-accent-ink: #26212f;
-  --c-positive: #90b3a1;
-  --c-negative: #c08e9a;
-  --c-warning: #bfa57c;
-  --c-glow: rgba(183, 170, 212, 0.26);
-  --c-glow-2: rgba(170, 160, 205, 0.16);
-  --c-shadow: rgba(53, 48, 63, 0.07);
-  --c-shadow-lg: rgba(53, 48, 63, 0.12);
-}
+/*
+ * Theme tokens are injected at runtime from src/config/themes.js:
+ * colors (--c-*) plus shape, depth, density and type tokens.
+ */
 
 /* ------------------------------------------------------------------
    Base
@@ -160,7 +26,7 @@
     margin: 0;
     background-color: var(--c-canvas);
     color: var(--c-ink);
-    font-family: theme('fontFamily.sans');
+    font-family: var(--font-family, sans-serif);
     font-size: 14px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -210,16 +76,16 @@
 }
 
 /* ------------------------------------------------------------------
-   Components — flat surfaces, 1px hairlines, no offset shadows.
+   Components — shape, depth, density and type come from design tokens.
    ------------------------------------------------------------------ */
 
 @layer components {
   .card {
     position: relative;
-    border-radius: 0.875rem;
-    border: 1px solid var(--c-line);
+    border-radius: var(--radius, 8px);
+    border: var(--border-width, 1px) solid var(--c-line);
     background-color: var(--c-surface);
-    box-shadow: 0 1px 2px var(--c-shadow);
+    box-shadow: var(--shadow, none);
   }
 
   .card-hover {
@@ -235,10 +101,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.45rem;
-    border-radius: 0.55rem;
-    border: 1px solid transparent;
-    padding: 0.5rem 0.9rem;
+    gap: calc(var(--spacing, 0.75rem) * 0.6);
+    border-radius: var(--radius, 8px);
+    border: var(--border-width, 1px) solid transparent;
+    padding: calc(var(--spacing, 0.75rem) * 0.67) var(--spacing, 0.75rem);
+    font-family: var(--font-family, sans-serif);
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.01em;
@@ -252,6 +119,12 @@
   .btn:disabled {
     cursor: not-allowed;
     opacity: 0.45;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger {
+    box-shadow: var(--shadow, none);
   }
 
   .btn-primary {
@@ -296,24 +169,25 @@
   }
 
   .btn-sm {
-    padding: 0.35rem 0.65rem;
+    padding: calc(var(--spacing, 0.75rem) * 0.45) calc(var(--spacing, 0.75rem) * 0.8);
     font-size: 12px;
-    border-radius: 0.45rem;
+    border-radius: var(--radius, 8px);
   }
 
   .btn-icon {
     padding: 0.45rem;
     width: 2.15rem;
     height: 2.15rem;
-    border-radius: 0.5rem;
+    border-radius: var(--radius, 8px);
   }
 
   .input {
     width: 100%;
-    border-radius: 0.55rem;
-    border: 1px solid var(--c-line);
+    border-radius: var(--radius, 8px);
+    border: var(--border-width, 1px) solid var(--c-line);
     background-color: color-mix(in srgb, var(--c-canvas) 45%, var(--c-surface));
-    padding: 0.55rem 0.75rem;
+    padding: calc(var(--spacing, 0.75rem) * 0.7) calc(var(--spacing, 0.75rem) * 0.95);
+    font-family: var(--font-family, sans-serif);
     font-size: 13px;
     color: var(--c-ink);
     transition: border-color 140ms ease, background-color 140ms ease;
@@ -361,11 +235,11 @@
   .chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    border-radius: 999px;
-    border: 1px solid var(--c-line);
+    gap: calc(var(--spacing, 0.75rem) * 0.35);
+    border-radius: var(--radius, 8px);
+    border: var(--border-width, 1px) solid var(--c-line);
     background-color: color-mix(in srgb, var(--c-canvas) 40%, transparent);
-    padding: 0.2rem 0.55rem;
+    padding: calc(var(--spacing, 0.75rem) * 0.22) calc(var(--spacing, 0.75rem) * 0.7);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.02em;
@@ -377,9 +251,9 @@
     position: relative;
     display: flex;
     align-items: center;
-    gap: 0.7rem;
-    border-radius: 0.5rem;
-    padding: 0.55rem 0.7rem;
+    gap: calc(var(--spacing, 0.75rem) * 0.95);
+    border-radius: var(--radius, 8px);
+    padding: calc(var(--spacing, 0.75rem) * 0.72) calc(var(--spacing, 0.75rem) * 0.95);
     font-size: 13px;
     font-weight: 500;
     color: var(--c-muted);
@@ -420,7 +294,7 @@
   }
 
   .stat-value {
-    font-family: theme('fontFamily.display');
+    font-family: var(--font-family, sans-serif);
     font-size: 1.5rem;
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -436,14 +310,14 @@
   }
 
   .page-title {
-    font-family: theme('fontFamily.display');
+    font-family: var(--font-family, sans-serif);
     font-size: 1.4rem;
     font-weight: 600;
     letter-spacing: -0.02em;
   }
 
   .section-title {
-    font-family: theme('fontFamily.display');
+    font-family: var(--font-family, sans-serif);
     font-size: 0.9rem;
     font-weight: 600;
     letter-spacing: -0.01em;
@@ -471,6 +345,18 @@
 }
 
 @layer utilities {
+  .radius-theme {
+    border-radius: var(--radius, 8px);
+  }
+
+  .shadow-theme {
+    box-shadow: var(--shadow, none);
+  }
+
+  .border-theme {
+    border-width: var(--border-width, 1px);
+  }
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

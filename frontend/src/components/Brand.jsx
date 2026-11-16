@@ -5,7 +5,7 @@ export default function Brand({ size = 'md', withText = true }) {
   return (
     <div className="flex items-center gap-2.5">
       <div
-        className={`relative flex ${box} shrink-0 items-center justify-center overflow-hidden rounded-xl`}
+        className={`relative flex ${box} shrink-0 items-center justify-center overflow-hidden radius-theme`}
         style={{
           backgroundColor: 'var(--c-accent)',
           color: 'var(--c-accent-ink)',
@@ -27,10 +27,7 @@ export default function Brand({ size = 'md', withText = true }) {
 
       {withText ? (
         <div className="leading-none">
-          <p className="font-display text-[17px] font-semibold tracking-tight text-ink">Talis</p>
-          <p className="mt-1.5 text-[9px] font-semibold uppercase tracking-[0.28em] text-muted">
-            Studio
-          </p>
+          <p className="font-display text-[17px] font-semibold tracking-tight text-ink">Ember</p>
         </div>
       ) : null}
     </div>

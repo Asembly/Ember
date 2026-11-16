@@ -98,7 +98,7 @@ export default function PomodoroTimer() {
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="flex items-center gap-2.5">
           <span
-            className="flex h-8 w-8 items-center justify-center rounded-lg"
+            className="flex h-8 w-8 items-center justify-center radius-theme"
             style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-accent)' }}
           >
             <TimerIcon size={15} />
@@ -111,7 +111,7 @@ export default function PomodoroTimer() {
 
         <div className="flex flex-wrap items-center gap-1.5">
           <span
-            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-[3px] text-[10.5px] font-semibold"
+            className="inline-flex items-center gap-1.5 radius-theme px-2.5 py-[3px] text-[10.5px] font-semibold"
             style={{
               backgroundColor: isFocus
                 ? 'var(--c-accent-soft)'
@@ -123,7 +123,7 @@ export default function PomodoroTimer() {
           </span>
           {sessionActive ? (
             <span
-              className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-[3px] text-[10.5px] font-semibold"
+              className="inline-flex items-center gap-1.5 radius-theme px-2.5 py-[3px] text-[10.5px] font-semibold"
               style={{
                 backgroundColor: 'color-mix(in srgb, var(--c-positive) 14%, transparent)',
                 color: 'var(--c-positive)',
@@ -154,7 +154,7 @@ export default function PomodoroTimer() {
                 <button
                   key={minutes}
                   type="button"
-                  className="rounded-full border px-2.5 py-[3px] text-[10.5px] font-semibold transition"
+                  className="radius-theme border px-2.5 py-[3px] text-[10.5px] font-semibold transition"
                   style={{
                     borderColor: active ? 'var(--c-accent)' : 'var(--c-line)',
                     backgroundColor: active ? 'var(--c-accent-soft)' : 'transparent',

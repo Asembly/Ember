@@ -22,21 +22,8 @@ module.exports = {
         warning: 'var(--c-warning)',
       },
       fontFamily: {
-        sans: [
-          'Inter',
-          'Segoe UI Variable Text',
-          'Segoe UI',
-          'system-ui',
-          '-apple-system',
-          'sans-serif',
-        ],
-        display: [
-          'Inter',
-          'Segoe UI Variable Display',
-          'Segoe UI',
-          'system-ui',
-          'sans-serif',
-        ],
+        sans: ['var(--font-family, Inter, Segoe UI, system-ui, sans-serif)'],
+        display: ['var(--font-family, Inter, Segoe UI, system-ui, sans-serif)'],
         mono: ['Cascadia Mono', 'Consolas', 'ui-monospace', 'monospace'],
       },
       borderRadius: {

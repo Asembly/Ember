@@ -228,7 +228,7 @@ export default function Tasks() {
                 type="button"
                 onClick={() => setStatusFilter(filter.id)}
                 aria-pressed={active}
-                className="whitespace-nowrap rounded-lg border px-2.5 py-1.5 text-[11px] font-medium transition"
+                className="whitespace-nowrap radius-theme border px-2.5 py-1.5 text-[11px] font-medium transition"
                 style={{
                   borderColor: active ? 'transparent' : 'var(--c-line)',
                   backgroundColor: active ? 'var(--c-accent)' : 'transparent',
@@ -285,13 +285,14 @@ export default function Tasks() {
             type="button"
             onClick={() => setTagFilter('ALL')}
             aria-pressed={tagFilter === 'ALL'}
-            className="border-2 px-2.5 py-1 text-[11px] font-bold transition"
+            className="border px-2.5 py-1 text-[11px] font-bold transition"
             style={{
               borderColor: 'var(--c-ink)',
-              borderRadius: '999px',
+              borderWidth: 'var(--border-width, 1px)',
+              borderRadius: 'var(--radius, 8px)',
               backgroundColor: tagFilter === 'ALL' ? 'var(--c-accent)' : 'transparent',
               color: tagFilter === 'ALL' ? 'var(--c-accent-ink)' : 'var(--c-muted)',
-              boxShadow: tagFilter === 'ALL' ? '2px 2px 0 var(--c-ink)' : 'none',
+              boxShadow: tagFilter === 'ALL' ? 'var(--shadow)' : 'none',
             }}
           >
             Все
@@ -307,13 +308,14 @@ export default function Tasks() {
                 type="button"
                 onClick={() => setTagFilter(active ? 'ALL' : String(tag.id))}
                 aria-pressed={active}
-                className="inline-flex items-center gap-1.5 border-2 px-2.5 py-1 text-[11px] font-bold transition"
+                className="inline-flex items-center gap-1.5 border px-2.5 py-1 text-[11px] font-bold transition"
                 style={{
                   borderColor: 'var(--c-ink)',
-                  borderRadius: '999px',
+                  borderWidth: 'var(--border-width, 1px)',
+                  borderRadius: 'var(--radius, 8px)',
                   backgroundColor: active ? hex : 'transparent',
                   color: active ? '#141018' : 'var(--c-muted)',
-                  boxShadow: active ? '2px 2px 0 var(--c-ink)' : 'none',
+                  boxShadow: active ? 'var(--shadow)' : 'none',
                 }}
               >
                 <span

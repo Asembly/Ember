@@ -9,12 +9,6 @@ export default function LevelRing({ level = 1, percent = 0, size = 136, stroke =
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90" aria-hidden="true">
-        <defs>
-          <linearGradient id="level-ring-fill" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="var(--c-accent)" />
-            <stop offset="100%" stopColor="var(--c-accent-strong)" />
-          </linearGradient>
-        </defs>
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -29,7 +23,7 @@ export default function LevelRing({ level = 1, percent = 0, size = 136, stroke =
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="url(#level-ring-fill)"
+          stroke="var(--c-accent)"
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={circumference}

@@ -249,7 +249,7 @@ export default function TaskFormModal({
               <button
                 type="button"
                 onClick={onOpenLibrary}
-                className="mt-1.5 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed px-3 py-2 text-[11.5px] font-semibold transition hover:border-transparent"
+                className="mt-1.5 flex w-full items-center justify-center gap-2 radius-theme border border-dashed px-3 py-2 text-[11.5px] font-semibold transition hover:border-transparent"
                 style={{
                   borderColor: 'var(--c-line)',
                   color: 'var(--c-accent)',
@@ -320,13 +320,14 @@ export default function TaskFormModal({
                     type="button"
                     onClick={() => toggleTag(tag.id)}
                     aria-pressed={selected}
-                    className="inline-flex items-center gap-1.5 border-2 px-2.5 py-1 text-[11px] font-bold transition"
+                    className="inline-flex items-center gap-1.5 border px-2.5 py-1 text-[11px] font-bold transition"
                     style={{
                       borderColor: 'var(--c-ink)',
-                      borderRadius: '999px',
+                      borderWidth: 'var(--border-width, 1px)',
+                      borderRadius: 'var(--radius, 8px)',
                       backgroundColor: selected ? hex : 'transparent',
                       color: selected ? '#141018' : 'var(--c-muted)',
-                      boxShadow: selected ? '2px 2px 0 var(--c-ink)' : 'none',
+                      boxShadow: selected ? 'var(--shadow)' : 'none',
                     }}
                   >
                     <span
@@ -380,10 +381,11 @@ export default function TaskFormModal({
                       onClick={() => setTagColor(color)}
                       aria-label={TAG_COLOR_LABELS[color] || color}
                       title={TAG_COLOR_LABELS[color] || color}
-                      className="h-[18px] w-[18px] border-2 transition"
+                      className="h-[18px] w-[18px] border transition"
                       style={{
                         borderColor: selected ? 'var(--c-ink)' : 'var(--c-line)',
-                        borderRadius: '999px',
+                        borderWidth: 'var(--border-width, 1px)',
+                        borderRadius: 'calc(var(--radius, 8px) * 0.45)',
                         backgroundColor: tagColorHex(color),
                         transform: selected ? 'scale(1.15)' : 'none',
                       }}
@@ -414,7 +416,7 @@ export default function TaskFormModal({
         ) : null}
 
         {submitError ? (
-          <p className="flex items-start gap-2 rounded-xl px-3 py-2 text-[11.5px] leading-snug" style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-negative)' }}>
+          <p className="flex items-start gap-2 radius-theme px-3 py-2 text-[11.5px] leading-snug" style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-negative)' }}>
             <AlertIcon size={14} className="mt-0.5 shrink-0" />
             {submitError}
           </p>
