@@ -24,18 +24,26 @@ public class TimeSessionService {
 
     private final TimeSessionRepository sessionRepository;
     private final TimeSessionMapper sessionMapper;
+    private final ActiveSessionRepository activeSessionRepository;
 
     @Transactional
     public TimeSessionResponseDto startTimer(Task task) {
 
-        var optSession = getActiveSession(task.getId());
+        var profile = task.getProfile();
 
-        if (optSession.isPresent())
-            throw new AlreadyExistsException("session", "taskId", task.getId());
+        var exist = activeSessionRepository.findByProfileId(profile.getId());
+        if (exist.isPresent())
+            throw new AlreadyExistsException("session", "profileId", profile.getId());
 
         var session = TimeSession.builder().task(task).build();
 
         sessionRepository.save(session);
+        var active = ActiveSession.builder()
+                .profile(profile)
+                .timeSession(session)
+                .build();
+
+        activeSessionRepository.save(active);
 
         return sessionMapper.toTimeSessionResponse(session);
     }
@@ -61,12 +69,12 @@ public class TimeSessionService {
     @Transactional
     public TimeSessionResponseDto stopTimer(Task task) {
 
-        var optSession = getActiveSession(task.getId());
+        var profile = task.getProfile();
 
-        if (optSession.isEmpty())
-            throw new NotFoundException("session", "taskId", task.getId());
+        var activeSession = activeSessionRepository.findByProfileId(profile.getId()).orElseThrow(
+                () -> new NotFoundException("session", "profileId", profile.getId()));
 
-        var session = optSession.get();
+        var session = activeSession.getTimeSession();
         var endTime = LocalDateTime.now();
         var startTime = session.getCreatedAt();
         session.setEndTime(endTime);
@@ -76,6 +84,8 @@ public class TimeSessionService {
         session.setDurationInMin(durationInMinutes);
 
         sessionRepository.save(session);
+        activeSessionRepository.delete(activeSession);
+
         return sessionMapper.toTimeSessionResponse(session);
     }
 
