@@ -118,6 +118,7 @@ export default function AppLayout() {
     if (status !== 'ready' || profileId == null) return
     useTaskStore.getState().fetchAll(profileId)
     useSessionStore.getState().fetchSessions()
+    useSessionStore.getState().fetchActiveSession(profileId)
   }, [status, profileId])
 
   if (status === 'idle' || status === 'loading') {

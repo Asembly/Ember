@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import asembly.ember.time_session.dto.ActiveSessionResponseDto;
 import asembly.ember.time_session.dto.TimeSessionResponseDto;
 
 /**
@@ -32,6 +33,12 @@ public class TimeSessionController {
     @GetMapping("/get/{id}")
     public ResponseEntity<TimeSessionResponseDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(sessionService.getById(id));
+    }
+
+    @GetMapping("/get/active/{profileId}")
+    public ResponseEntity<ActiveSessionResponseDto> getActiveByProfileId(
+            @PathVariable Long profileId) {
+        return ResponseEntity.ok(sessionService.getActiveSessionByProfileId(profileId));
     }
 
 }

@@ -13,4 +13,6 @@ public interface ActiveSessionRepository extends JpaRepository<ActiveSession, Lo
 
     Optional<ActiveSession> findByProfileId(Long profileId);
 
+    void deleteByTimeSessionId(Long timeSessionId);
+
 }

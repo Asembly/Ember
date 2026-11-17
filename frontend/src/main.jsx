@@ -10,9 +10,9 @@ import './index.css'
 applyTheme(useThemeStore.getState().currentThemeId)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </React.StrictMode>,
+    <React.StrictMode>
+        <HashRouter>
+            <App />
+        </HashRouter>
+    </React.StrictMode>,
 )

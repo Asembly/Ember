@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import asembly.ember.common.exception.AlreadyExistsException;
 import asembly.ember.common.exception.NotFoundException;
 import asembly.ember.task.Task;
+import asembly.ember.time_session.dto.ActiveSessionResponseDto;
 import asembly.ember.time_session.dto.TimeSessionResponseDto;
 import lombok.RequiredArgsConstructor;
 
@@ -32,8 +33,16 @@ public class TimeSessionService {
         var profile = task.getProfile();
 
         var exist = activeSessionRepository.findByProfileId(profile.getId());
-        if (exist.isPresent())
-            throw new AlreadyExistsException("session", "profileId", profile.getId());
+        if (exist.isPresent()) {
+            var active = exist.get();
+
+            if (active.getTimeSession().getEndTime() == null) {
+                throw new AlreadyExistsException("session", "profileId", profile.getId());
+            }
+
+            activeSessionRepository.delete(active);
+            activeSessionRepository.flush();
+        }
 
         var session = TimeSession.builder().task(task).build();
 
@@ -63,6 +72,7 @@ public class TimeSessionService {
         session.setDurationInMin(durationInMinutes);
 
         sessionRepository.save(session);
+        activeSessionRepository.deleteByTimeSessionId(session.getId());
         return sessionMapper.toTimeSessionResponse(session);
     }
 
@@ -74,19 +84,7 @@ public class TimeSessionService {
         var activeSession = activeSessionRepository.findByProfileId(profile.getId()).orElseThrow(
                 () -> new NotFoundException("session", "profileId", profile.getId()));
 
-        var session = activeSession.getTimeSession();
-        var endTime = LocalDateTime.now();
-        var startTime = session.getCreatedAt();
-        session.setEndTime(endTime);
-
-        long durationInMinutes = Duration.between(startTime, endTime).toMinutes();
-
-        session.setDurationInMin(durationInMinutes);
-
-        sessionRepository.save(session);
-        activeSessionRepository.delete(activeSession);
-
-        return sessionMapper.toTimeSessionResponse(session);
+        return stopTimer(activeSession.getTimeSession());
     }
 
     public List<TimeSessionResponseDto> getAll() {
@@ -109,6 +107,12 @@ public class TimeSessionService {
 
     public Optional<TimeSession> getActiveSession(Long taskId) {
         return sessionRepository.findActiveSession(taskId);
+    }
+
+    @Transactional(readOnly = true)
+    public ActiveSessionResponseDto getActiveSessionByProfileId(Long profileId) {
+        return sessionMapper.toActiveSessionResponseDto(activeSessionRepository.findByProfileId(profileId).orElseThrow(
+                () -> new NotFoundException("session", "profile", profileId)));
     }
 
 }

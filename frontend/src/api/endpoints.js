@@ -59,6 +59,7 @@ export const taskApi = {
 export const sessionApi = {
   list: () => client.get('/session/get'),
   byId: (id) => client.get(`/session/get/${id}`),
+  active: (profileId) => client.get(`/session/get/active/${profileId}`),
 }
 
 export const actionApi = {

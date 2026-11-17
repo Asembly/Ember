@@ -14,77 +14,77 @@ import { useAuthStore } from './stores/authStore'
 import { useThemeStore } from './stores/themeStore'
 
 function RequireAuth({ children }) {
-  const status = useAuthStore((state) => state.status)
-  const location = useLocation()
+    const status = useAuthStore((state) => state.status)
+    const location = useLocation()
 
-  if (status !== 'authenticated') {
-    return <Navigate to="/login" replace state={{ from: location.pathname }} />
-  }
+    if (status !== 'authenticated') {
+        return <Navigate to="/login" replace state={{ from: location.pathname }} />
+    }
 
-  return children
+    return children
 }
 
 function PublicOnly({ children }) {
-  const status = useAuthStore((state) => state.status)
-  const location = useLocation()
+    const status = useAuthStore((state) => state.status)
+    const location = useLocation()
 
-  if (status === 'authenticated') {
-    const from = location.state?.from
-    return <Navigate to={from && from !== '/login' ? from : '/'} replace />
-  }
+    if (status === 'authenticated') {
+        const from = location.state?.from
+        return <Navigate to={from && from !== '/login' ? from : '/'} replace />
+    }
 
-  return children
+    return children
 }
 
 export default function App() {
-  const currentThemeId = useThemeStore((state) => state.currentThemeId)
+    const currentThemeId = useThemeStore((state) => state.currentThemeId)
 
-  useLayoutEffect(() => {
-    applyTheme(currentThemeId)
-  }, [currentThemeId])
+    useLayoutEffect(() => {
+        applyTheme(currentThemeId)
+    }, [currentThemeId])
 
-  useEffect(() => {
-    setUnauthorizedHandler(() => {
-      useAuthStore.getState().handleUnauthorized()
-    })
+    useEffect(() => {
+        setUnauthorizedHandler(() => {
+            useAuthStore.getState().handleUnauthorized()
+        })
 
-    return () => setUnauthorizedHandler(null)
-  }, [])
+        return () => setUnauthorizedHandler(null)
+    }, [])
 
-  return (
-    <Routes>
-      <Route
-        path="/login"
-        element={
-          <PublicOnly>
-            <Login />
-          </PublicOnly>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <PublicOnly>
-            <Register />
-          </PublicOnly>
-        }
-      />
+    return (
+        <Routes>
+            <Route
+                path="/login"
+                element={
+                    <PublicOnly>
+                        <Login />
+                    </PublicOnly>
+                }
+            />
+            <Route
+                path="/register"
+                element={
+                    <PublicOnly>
+                        <Register />
+                    </PublicOnly>
+                }
+            />
 
-      <Route
-        element={
-          <RequireAuth>
-            <AppLayout />
-          </RequireAuth>
-        }
-      >
-        <Route index element={<Dashboard />} />
-        <Route path="tasks" element={<Tasks />} />
-        <Route path="achievements" element={<Achievements />} />
-        <Route path="leaderboard" element={<Leaderboard />} />
-        <Route path="history" element={<History />} />
-      </Route>
+            <Route
+                element={
+                    <RequireAuth>
+                        <AppLayout />
+                    </RequireAuth>
+                }
+            >
+                <Route index element={<Dashboard />} />
+                <Route path="tasks" element={<Tasks />} />
+                <Route path="achievements" element={<Achievements />} />
+                <Route path="leaderboard" element={<Leaderboard />} />
+                <Route path="history" element={<History />} />
+            </Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  )
+            <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+    )
 }
