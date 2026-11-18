@@ -86,24 +86,24 @@ export default function History() {
 
   return (
     <div className="space-y-4">
-      <section className="card p-5">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="flex flex-wrap items-end gap-6">
+      <section className="card card-lg p-5">
+        <div className="flex flex-wrap items-end justify-between gap-5">
+          <div className="grid flex-1 grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
             <div>
               <p className="eyebrow">Всего в сессиях</p>
-              <p className="stat-value mt-1 text-ink">{formatDuration(totalMinutes)}</p>
+              <p className="stat-value mt-1.5 text-ink">{formatDuration(totalMinutes)}</p>
             </div>
             <div>
               <p className="eyebrow">Сессий</p>
-              <p className="stat-value mt-1 text-ink">{filtered.length}</p>
+              <p className="stat-value mt-1.5 text-ink">{filtered.length}</p>
             </div>
             <div>
               <p className="eyebrow">Средняя</p>
-              <p className="stat-value mt-1 text-ink">{formatDuration(average)}</p>
+              <p className="stat-value mt-1.5 text-ink">{formatDuration(average)}</p>
             </div>
             <div>
               <p className="eyebrow">Сегодня</p>
-              <p className="stat-value mt-1" style={{ color: 'var(--c-accent)' }}>
+              <p className="stat-value mt-1.5" style={{ color: 'var(--c-positive)' }}>
                 {formatDuration(todayMinutes)}
               </p>
             </div>
@@ -137,7 +137,10 @@ export default function History() {
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-1.5 border-t border-line pt-3.5">
+        <div
+          className="mt-4 flex flex-wrap items-center gap-1.5 pt-3.5"
+          style={{ borderTop: '1px solid var(--c-line)' }}
+        >
           {RANGES.map((item) => {
             const active = range === item.id
 
@@ -147,12 +150,7 @@ export default function History() {
                 type="button"
                 onClick={() => setRange(item.id)}
                 aria-pressed={active}
-                className="radius-theme border px-2.5 py-1.5 text-[11px] font-medium transition"
-                style={{
-                  borderColor: active ? 'transparent' : 'var(--c-line)',
-                  backgroundColor: active ? 'var(--c-accent)' : 'transparent',
-                  color: active ? 'var(--c-accent-ink)' : 'var(--c-muted)',
-                }}
+                className="tab"
               >
                 {item.label}
               </button>
@@ -162,7 +160,7 @@ export default function History() {
           {filtersActive ? (
             <button
               type="button"
-              className="ml-auto inline-flex items-center gap-1.5 text-[10.5px] font-semibold"
+              className="ml-auto inline-flex items-center gap-1.5 text-[10.5px] font-semibold transition hover:opacity-80"
               style={{ color: 'var(--c-accent)' }}
               onClick={() => {
                 setRange('ALL')
@@ -198,25 +196,22 @@ export default function History() {
             return (
               <section key={group.key} className="card overflow-hidden">
                 <header
-                  className="flex items-center justify-between gap-3 border-b border-line px-5 py-3"
-                  style={{ backgroundColor: 'var(--c-raised)' }}
+                  className="flex items-center justify-between gap-3 px-5 py-3"
+                  style={{ backgroundColor: 'var(--c-sunken)' }}
                 >
                   <div className="flex items-center gap-2.5">
                     <CalendarIcon size={13} style={{ color: 'var(--c-accent)' }} />
-                    <h2 className="text-[12.5px] font-semibold text-ink">
+                    <h2 className="text-[12px] font-semibold text-ink">
                       {group.date ? formatDayLabel(group.date) : 'Без даты'}
                     </h2>
                     {group.date && isToday(group.date) ? (
-                      <span
-                        className="radius-theme px-2 py-[2px] text-[9.5px] font-semibold uppercase tracking-[0.12em]"
-                        style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-accent)' }}
-                      >
+                      <span className="chip chip-positive h-5 px-2 text-[8.5px] font-semibold uppercase tracking-[0.08em]">
                         Сегодня
                       </span>
                     ) : null}
                   </div>
 
-                  <span className="inline-flex items-center gap-1.5 text-[10.5px] text-muted">
+                  <span className="inline-flex items-center gap-1.5 text-[10px] text-muted">
                     <span>
                       {group.items.length} {plural(group.items.length, 'сессия', 'сессии', 'сессий')}
                     </span>
@@ -232,39 +227,41 @@ export default function History() {
                     const minutes = Number(session.durationInMin) || 0
 
                     return (
-                      <li
-                        key={session.id}
-                        className="flex items-center gap-3 border-b border-line px-5 py-3 last:border-b-0"
-                      >
-                        <div
-                          className="flex h-8 w-8 shrink-0 items-center justify-center radius-theme"
-                          style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-accent)' }}
-                        >
-                          <TimerIcon size={14} />
-                        </div>
+                      <li key={session.id}>
+                        <div className="flex items-center gap-3 px-5 py-3">
+                          <div
+                            className="flex h-8 w-8 shrink-0 items-center justify-center"
+                            style={{
+                              borderRadius: 'calc(var(--radius-sm, 12px) * 0.75)',
+                              backgroundColor: 'var(--c-accent-soft)',
+                              color: 'var(--c-accent)',
+                            }}
+                          >
+                            <TimerIcon size={14} />
+                          </div>
 
-                        <div className="min-w-0 flex-1">
-                          <p className="text-[12px] font-medium text-ink">
-                            {start ? formatTime(start) : '—'}
-                            {end ? ` — ${formatTime(end)}` : ''}
-                          </p>
-                          <p className="mt-0.5 text-[10.5px] text-muted">
-                            {minutes > 0
-                              ? formatClock(minutes * 60 * 1000)
-                              : 'Менее минуты'}{' '}
-                            · сессия #{session.id}
-                          </p>
-                        </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[12px] font-medium text-ink">
+                              {start ? formatTime(start) : '—'}
+                              {end ? ` — ${formatTime(end)}` : ''}
+                            </p>
+                            <p className="mt-0.5 text-[10px] text-muted">
+                              {minutes > 0 ? formatClock(minutes * 60 * 1000) : 'Менее минуты'} · сессия #
+                              {session.id}
+                            </p>
+                          </div>
 
-                        <div className="shrink-0 text-right">
-                          <p className="text-[12px] font-semibold text-ink">
-                            {minutes} {plural(minutes, 'минута', 'минуты', 'минут')}
-                          </p>
-                          <p className="mt-0.5 inline-flex items-center gap-1 text-[10px] text-muted">
-                            <ClockIcon size={9} />
-                            зачтено
-                          </p>
+                          <div className="shrink-0 text-right">
+                            <p className="text-[12px] font-semibold" style={{ color: 'var(--c-positive)' }}>
+                              {minutes} {plural(minutes, 'минута', 'минуты', 'минут')}
+                            </p>
+                            <p className="mt-0.5 inline-flex items-center gap-1 text-[9.5px] text-muted">
+                              <ClockIcon size={9} />
+                              зачтено
+                            </p>
+                          </div>
                         </div>
+                        <div className="surface-divider ml-5" />
                       </li>
                     )
                   })}

@@ -60,13 +60,13 @@ export default function Register() {
       footer={
         <>
           Уже есть аккаунт?{' '}
-          <Link to="/login" className="font-bold underline decoration-2 underline-offset-2" style={{ color: 'var(--c-accent)' }}>
+          <Link to="/login" className="font-semibold underline-offset-2 hover:underline" style={{ color: 'var(--c-accent)' }}>
             Войти
           </Link>
         </>
       }
     >
-      <form onSubmit={handleSubmit} className="mt-5 space-y-3.5" noValidate>
+      <form onSubmit={handleSubmit} className="mt-6 space-y-3.5" noValidate>
         <div>
           <label htmlFor="register-nickname" className="label">
             Никнейм
@@ -74,7 +74,7 @@ export default function Register() {
           <input
             id="register-nickname"
             type="text"
-            className="input mt-1.5 w-full"
+            className="input w-full"
             value={form.nickname}
             onChange={update('nickname')}
             placeholder="Как вас называть"
@@ -90,7 +90,7 @@ export default function Register() {
           <input
             id="register-email"
             type="email"
-            className="input mt-1.5 w-full"
+            className="input w-full"
             value={form.email}
             onChange={update('email')}
             placeholder="you@example.com"
@@ -106,7 +106,7 @@ export default function Register() {
             <input
               id="register-password"
               type="password"
-              className="input mt-1.5 w-full"
+              className="input w-full"
               value={form.password}
               onChange={update('password')}
               placeholder="Минимум 4 символа"
@@ -120,7 +120,7 @@ export default function Register() {
             <input
               id="register-repeat"
               type="password"
-              className="input mt-1.5 w-full"
+              className="input w-full"
               value={form.repeat}
               onChange={update('repeat')}
               placeholder="Ещё раз"

@@ -2,50 +2,69 @@ import ProgressBar from './ProgressBar'
 import { AchievementIcon, CheckIcon, LockIcon } from './icons'
 import { plural } from '../lib/format'
 
-const ICON_TINT = {
-  spark: '#f7b6d3',
-  flame: '#f5a97f',
-  crown: '#f3d39a',
-  shield: '#a9c6f5',
-  star: '#f3d39a',
-  bolt: '#c5b1f5',
-  clock: '#a9e3c2',
-  road: '#a8e6c9',
-  balance: '#a9c6f5',
-  check: '#f5b0a8',
+const ICON_TONE = {
+  spark: 'var(--c-accent)',
+  flame: 'var(--c-warning)',
+  crown: 'var(--c-positive)',
+  shield: 'var(--c-accent-strong)',
+  star: 'var(--c-warning)',
+  bolt: 'var(--c-accent)',
+  clock: 'var(--c-positive)',
+  road: 'var(--c-positive)',
+  balance: 'var(--c-accent)',
+  check: 'var(--c-negative)',
 }
 
 export default function AchievementCard({ achievement }) {
-  const tint = ICON_TINT[achievement.icon] || 'var(--c-accent)'
+  const tone = ICON_TONE[achievement.icon] || 'var(--c-accent)'
   const unlocked = achievement.unlocked
 
   return (
     <article
-      className="card flex flex-col gap-3 p-4 transition duration-200 hover:-translate-y-0.5"
+      className="card card-hover flex flex-col gap-3 p-4"
       style={{
-        backgroundColor: unlocked ? 'var(--c-raised)' : 'var(--c-surface)',
+        borderRadius: 'var(--radius)',
+        backgroundColor: unlocked
+          ? 'color-mix(in srgb, var(--c-surface) 92%, var(--c-accent))'
+          : 'var(--c-surface)',
       }}
     >
       <div className="flex items-start gap-3">
         <div
-          className="flex h-11 w-11 shrink-0 items-center justify-center radius-theme border border-theme"
+          className="flex h-11 w-11 shrink-0 items-center justify-center"
           style={{
-            borderColor: unlocked ? `${tint}55` : 'var(--c-line)',
-            backgroundColor: unlocked ? `${tint}1f` : 'var(--c-canvas)',
-            color: unlocked ? tint : 'var(--c-muted)',
+            borderRadius: 'calc(var(--radius-sm, 12px) * 0.9)',
+            backgroundColor: unlocked
+              ? 'color-mix(in srgb, var(--c-accent) 18%, transparent)'
+              : 'var(--c-raised)',
+            color: unlocked ? tone : 'var(--c-muted)',
           }}
         >
           <AchievementIcon name={achievement.icon} size={20} />
         </div>
 
         <div className="min-w-0 flex-1">
-          <h3 className="line-clamp-1 text-[13px] font-semibold text-ink">
+          <h3 className="line-clamp-1 text-[12.5px] font-semibold text-ink">
             {achievement.name}
           </h3>
-          <p className="mt-0.5 line-clamp-2 text-[11px] leading-relaxed text-muted">
+          <p className="mt-0.5 line-clamp-2 text-[10.5px] leading-relaxed text-muted">
             {achievement.description}
           </p>
         </div>
+
+        {unlocked ? (
+          <span
+            className="flex h-6 w-6 shrink-0 items-center justify-center"
+            style={{
+              borderRadius: 'calc(var(--radius-sm, 12px) * 0.7)',
+              backgroundColor: 'var(--c-positive)',
+              color: 'var(--c-cta-ink)',
+            }}
+            aria-label="Получено"
+          >
+            <CheckIcon size={12} />
+          </span>
+        ) : null}
       </div>
 
       <div className="mt-auto">
@@ -54,11 +73,8 @@ export default function AchievementCard({ achievement }) {
             {achievement.current} / {achievement.goal} {achievement.unit}
           </span>
           {unlocked ? (
-            <span
-              className="inline-flex items-center gap-1 font-semibold"
-              style={{ color: 'var(--c-positive)' }}
-            >
-              <CheckIcon size={11} />
+            <span className="inline-flex items-center gap-1 font-semibold" style={{ color: 'var(--c-positive)' }}>
+              <CheckIcon size={10} />
               Получено
             </span>
           ) : (
@@ -83,7 +99,7 @@ export default function AchievementCard({ achievement }) {
 
 export function AchievementProgressSummary({ unlocked, total }) {
   return (
-    <span className="text-[11.5px] font-medium text-muted">
+    <span className="chip chip-positive h-5 px-2 text-[9.5px] font-semibold">
       {unlocked} из {total} {plural(total, 'достижение', 'достижения', 'достижений')}
     </span>
   )

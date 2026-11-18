@@ -1,141 +1,110 @@
-import { useEffect, useRef, useState } from 'react'
-import { CheckIcon, ChevronDownIcon, PaletteIcon } from './icons'
+import { CheckIcon } from './icons'
 import { themeList } from '../config/themes'
 import { useThemeStore } from '../stores/themeStore'
 
-export default function ThemeSwitcher() {
+/**
+ * Theme picker.
+ *
+ * `sidebar` (default) renders the "Твоя атмосфера" card used in the sidebar:
+ * the active theme as a filled row, the rest as quiet options.
+ * `compact` renders a row of swatches for narrow screens.
+ */
+export default function ThemeSwitcher({ compact = false }) {
   const currentThemeId = useThemeStore((state) => state.currentThemeId)
   const setTheme = useThemeStore((state) => state.setTheme)
 
-  const [open, setOpen] = useState(false)
-  const rootRef = useRef(null)
-  const triggerRef = useRef(null)
-
   const active = themeList.find((theme) => theme.id === currentThemeId) || themeList[0]
-  const activeAccent = active.colors['--c-accent']
+  const others = themeList.filter((theme) => theme.id !== active.id)
 
-  useEffect(() => {
-    if (!open) return undefined
+  if (compact) {
+    return (
+      <div className="flex items-center gap-1" role="group" aria-label="Тема оформления">
+        {themeList.map((theme) => {
+          const selected = theme.id === currentThemeId
 
-    const handlePointer = (event) => {
-      if (!rootRef.current) return
-      if (!rootRef.current.contains(event.target)) setOpen(false)
-    }
-
-    const handleKey = (event) => {
-      if (event.key === 'Escape') {
-        setOpen(false)
-        triggerRef.current?.focus()
-      }
-    }
-
-    document.addEventListener('mousedown', handlePointer)
-    document.addEventListener('keydown', handleKey)
-
-    return () => {
-      document.removeEventListener('mousedown', handlePointer)
-      document.removeEventListener('keydown', handleKey)
-    }
-  }, [open])
+          return (
+            <button
+              key={theme.id}
+              type="button"
+              onClick={() => setTheme(theme.id)}
+              aria-pressed={selected}
+              aria-label={`Тема ${theme.label}`}
+              title={theme.label}
+              className="flex h-7 w-7 items-center justify-center transition"
+              style={{
+                borderRadius: '999px',
+                backgroundColor: theme.colors['--c-accent'],
+                boxShadow: selected
+                  ? '0 0 0 2px var(--c-canvas), 0 0 0 3.5px var(--c-ink)'
+                  : 'none',
+                opacity: selected ? 1 : 0.6,
+              }}
+            >
+              {selected ? (
+                <CheckIcon size={12} style={{ color: theme.colors['--c-accent-ink'] }} />
+              ) : null}
+            </button>
+          )
+        })}
+      </div>
+    )
+  }
 
   return (
-    <div className="relative no-drag" ref={rootRef}>
-      <button
-        ref={triggerRef}
-        type="button"
-        className="btn btn-secondary btn-sm"
-        onClick={() => setOpen((previous) => !previous)}
-        aria-haspopup="menu"
-        aria-expanded={open}
-        aria-label={`Тема оформления: ${active.label}`}
-        title="Тема оформления"
-      >
-        <PaletteIcon size={13} />
-        <span className="hidden text-[11.5px] sm:inline">{active.label}</span>
-        <span
-          className="h-3 w-3 shrink-0"
-          style={{ borderRadius: '999px', backgroundColor: activeAccent }}
-          aria-hidden="true"
-        />
-        <ChevronDownIcon
-          size={11}
-          className={`shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
-        />
-      </button>
+    <div className="px-2">
+      <p className="eyebrow mb-2 font-semibold">Твоя атмосфера</p>
 
-      {open ? (
-        <div
-          role="menu"
-          aria-label="Тема оформления"
-          className="absolute right-0 z-40 mt-2 w-60 overflow-hidden p-1.5"
+      <div
+        className="p-2"
+        style={{ borderRadius: 'var(--radius)', backgroundColor: 'var(--c-raised)' }}
+        role="group"
+        aria-label="Тема оформления"
+      >
+        <button
+          type="button"
+          onClick={() => setTheme(active.id)}
+          aria-pressed="true"
+          className="flex h-9 w-full items-center justify-between px-3 text-[11.5px] font-bold transition"
           style={{
-            border: 'var(--border-width, 1px) solid var(--c-line)',
-            borderRadius: 'var(--radius, 8px)',
-            backgroundColor: 'var(--c-surface)',
-            boxShadow: 'var(--shadow, none)',
+            borderRadius: 'calc(var(--radius-sm, 12px) * 0.9)',
+            backgroundColor: 'var(--c-hero)',
+            color: 'var(--c-hero-ink)',
           }}
         >
-          <p
-            className="px-2 pb-1.5 pt-1 text-[9.5px] font-semibold uppercase tracking-[0.14em]"
-            style={{ color: 'var(--c-muted)' }}
-          >
-            Тема оформления
-          </p>
+          <span>{active.label}</span>
+          <span className="flex items-center gap-1.5">
+            <span
+              className="h-2.5 w-2.5"
+              style={{ borderRadius: '999px', backgroundColor: 'var(--c-accent)' }}
+              aria-hidden="true"
+            />
+            <CheckIcon size={13} />
+          </span>
+        </button>
 
-          {themeList.map((theme) => {
-            const selected = theme.id === currentThemeId
-
-            return (
+        {others.length > 0 ? (
+          <div className="mt-1 flex items-stretch gap-1">
+            {others.map((theme) => (
               <button
                 key={theme.id}
                 type="button"
-                role="menuitemradio"
-                aria-checked={selected}
-                onClick={() => {
-                  setTheme(theme.id)
-                  setOpen(false)
-                  triggerRef.current?.focus()
-                }}
-                className="flex w-full items-center gap-2.5 px-2 py-2 text-left transition"
-                style={{
-                  borderRadius: 'calc(var(--radius, 8px) * 0.65)',
-                  color: selected ? 'var(--c-ink)' : 'var(--c-muted)',
-                  backgroundColor: selected ? 'var(--c-accent-soft)' : 'transparent',
-                }}
+                onClick={() => setTheme(theme.id)}
+                aria-pressed="false"
+                className="flex h-8 flex-1 items-center justify-center gap-1.5 px-1 text-[10.5px] font-medium transition hover:text-ink"
+                style={{ borderRadius: 'calc(var(--radius-sm, 12px) * 0.8)', color: 'var(--c-muted)' }}
+                title={theme.hint}
               >
                 <span
-                  className="flex h-5 w-5 shrink-0 items-center justify-center"
-                  style={{
-                    border: '1px solid var(--c-line)',
-                    borderRadius: 'calc(var(--radius, 8px) * 0.45)',
-                    backgroundColor: theme.colors['--c-canvas'],
-                  }}
+                  className="h-1.5 w-1.5 shrink-0"
+                  style={{ borderRadius: '999px', backgroundColor: theme.colors['--c-accent'] }}
                   aria-hidden="true"
-                >
-                  <span
-                    className="h-2 w-2"
-                    style={{
-                      borderRadius: '999px',
-                      backgroundColor: theme.colors['--c-accent'],
-                    }}
-                  />
-                </span>
-
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[12px] font-medium">{theme.label}</span>
-                  <span className="mt-0.5 block truncate text-[10px] text-muted">
-                    {theme.hint}
-                  </span>
-                </span>
-
-                {selected ? (
-                  <CheckIcon size={12} style={{ color: 'var(--c-accent)' }} />
-                ) : null}
+                />
+                <span className="truncate">{theme.label}</span>
               </button>
-            )
-          })}
-        </div>
-      ) : null}
+            ))}
+          </div>
+        ) : null}
+      </div>
     </div>
   )
 }

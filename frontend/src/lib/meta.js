@@ -1,23 +1,23 @@
 export const STATUS_META = {
   OPEN: {
     label: 'Открыта',
-    dot: 'bg-sky-400',
-    chip: 'bg-sky-400/10 text-sky-200 border-sky-400/20',
+    dot: 'dot dot-open',
+    chip: 'chip chip-accent',
   },
   IN_PROGRESS: {
     label: 'В работе',
-    dot: 'bg-amber-400',
-    chip: 'bg-amber-400/10 text-amber-200 border-amber-400/20',
+    dot: 'dot dot-progress',
+    chip: 'chip chip-warning',
   },
   DONE: {
     label: 'Завершена',
-    dot: 'bg-emerald-400',
-    chip: 'bg-emerald-400/10 text-emerald-200 border-emerald-400/20',
+    dot: 'dot dot-done',
+    chip: 'chip chip-positive',
   },
   CANCELED: {
     label: 'Отменена',
-    dot: 'bg-rose-400',
-    chip: 'bg-rose-400/10 text-rose-200 border-rose-400/20',
+    dot: 'dot dot-canceled',
+    chip: 'chip chip-negative',
   },
 }
 
@@ -35,8 +35,8 @@ export function statusMeta(status) {
   return (
     STATUS_META[status] || {
       label: status || 'Неизвестно',
-      dot: 'bg-slate-400',
-      chip: 'bg-slate-400/10 text-slate-200 border-slate-400/20',
+      dot: 'dot dot-muted',
+      chip: 'chip',
     }
   )
 }
@@ -45,27 +45,27 @@ export const DIFFICULTY_META = {
   EASY: {
     label: 'Лёгкая',
     multiplier: 0.1,
-    chip: 'bg-emerald-400/10 text-emerald-200 border-emerald-400/20',
+    chip: 'chip chip-positive',
   },
   MEDIUM: {
     label: 'Средняя',
     multiplier: 0.5,
-    chip: 'bg-sky-400/10 text-sky-200 border-sky-400/20',
+    chip: 'chip chip-accent',
   },
   HARD: {
     label: 'Сложная',
     multiplier: 0.75,
-    chip: 'bg-amber-400/10 text-amber-200 border-amber-400/20',
+    chip: 'chip chip-warning',
   },
   EXTRA_HARD: {
     label: 'Очень сложная',
     multiplier: 0.8,
-    chip: 'bg-orange-400/10 text-orange-200 border-orange-400/20',
+    chip: 'chip chip-warning',
   },
   INSANE: {
     label: 'Безумная',
     multiplier: 1,
-    chip: 'bg-fuchsia-400/10 text-fuchsia-200 border-fuchsia-400/20',
+    chip: 'chip chip-negative',
   },
 }
 
@@ -85,7 +85,7 @@ export function difficultyMeta(difficulty) {
     DIFFICULTY_META[difficulty] || {
       label: difficulty || 'Неизвестно',
       multiplier: 0,
-      chip: 'bg-slate-400/10 text-slate-200 border-slate-400/20',
+      chip: 'chip',
     }
   )
 }

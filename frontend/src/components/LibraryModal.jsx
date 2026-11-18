@@ -113,8 +113,8 @@ export default function LibraryModal({
               {actions.map((action) => (
                 <li
                   key={action.id}
-                  className="radius-theme border border-line px-3 py-2.5"
-                  style={{ backgroundColor: 'var(--c-canvas)' }}
+                  className="px-3 py-2.5"
+                  style={{ borderRadius: 'var(--radius-sm, 12px)', backgroundColor: 'var(--c-sunken)' }}
                 >
                   <div className="flex items-center gap-2">
                     <SparkIcon size={13} style={{ color: 'var(--c-accent)' }} />
@@ -181,11 +181,13 @@ export default function LibraryModal({
                         type="button"
                         onClick={() => toggle(attribute.attributeId)}
                         aria-pressed={active}
-                        className="inline-flex items-center gap-1.5 radius-theme border px-2.5 py-1 text-[11px] font-medium transition"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10.5px] font-medium transition"
                         style={{
-                          borderColor: active ? 'transparent' : 'var(--c-line)',
-                          backgroundColor: active ? `${color}22` : 'transparent',
-                          color: active ? color : 'var(--c-muted)',
+                          border: '1px solid',
+                          borderColor: active ? `color-mix(in srgb, ${color} 55%, transparent)` : 'var(--c-line)',
+                          borderRadius: 'calc(var(--radius-sm, 12px) * 0.7)',
+                          backgroundColor: active ? `color-mix(in srgb, ${color} 20%, transparent)` : 'transparent',
+                          color: active ? 'var(--c-ink)' : 'var(--c-muted)',
                         }}
                       >
                         <span
@@ -203,8 +205,12 @@ export default function LibraryModal({
 
           {error ? (
             <p
-              className="mt-3 flex items-start gap-2 radius-theme px-3 py-2 text-[11.5px] leading-snug"
-              style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-negative)' }}
+              className="mt-3 flex items-start gap-2 px-3 py-2 text-[11px] leading-snug"
+              style={{
+                borderRadius: 'var(--radius-sm, 12px)',
+                backgroundColor: 'color-mix(in srgb, var(--c-negative) 12%, transparent)',
+                color: 'var(--c-negative)',
+              }}
             >
               <AlertIcon size={14} className="mt-0.5 shrink-0" />
               {error}

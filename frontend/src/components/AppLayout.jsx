@@ -2,11 +2,13 @@ import { useEffect } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import ThemeSwitcher from './ThemeSwitcher'
 import Toasts from './Toasts'
+import ProgressBar from './ProgressBar'
 import {
   AlertIcon,
   ArrowRightIcon,
   CrownIcon,
   DashboardIcon,
+  FlameIcon,
   HistoryIcon,
   RefreshIcon,
   SparkIcon,
@@ -53,7 +55,7 @@ function LogoutButton({ variant = 'sidebar' }) {
     return (
       <button
         type="button"
-        className="btn btn-ghost btn-sm w-full justify-between"
+        className="btn btn-ghost btn-sm w-full justify-between px-2"
         onClick={handleLogout}
       >
         Выйти
@@ -68,6 +70,7 @@ function LogoutButton({ variant = 'sidebar' }) {
       className="btn btn-ghost btn-icon"
       onClick={handleLogout}
       aria-label="Выйти"
+      title="Выйти"
     >
       <ArrowRightIcon size={14} className="rotate-180" />
     </button>
@@ -82,16 +85,16 @@ function BootScreen() {
     >
       <div className="w-full max-w-sm text-center">
         <div
-          className="mx-auto flex h-12 w-12 animate-pulse items-center justify-center"
+          className="mx-auto flex h-14 w-14 animate-pulse items-center justify-center"
           style={{
-            borderRadius: 'var(--radius, 8px)',
+            borderRadius: 'var(--radius, 16px)',
             backgroundColor: 'var(--c-accent)',
             color: 'var(--c-accent-ink)',
           }}
         >
-          <SparkIcon size={22} />
+          <SparkIcon size={24} />
         </div>
-        <p className="mt-5 text-[12.5px] font-medium text-ink">Загружаем профиль…</p>
+        <p className="display mt-5 text-[15px] font-semibold text-ink">Загружаем профиль…</p>
         <p className="mt-1.5 text-[11.5px] text-muted">Подключаемся к серверу Talis.</p>
       </div>
     </div>
@@ -133,16 +136,16 @@ export default function AppLayout() {
       >
         <div className="card w-full max-w-sm px-7 py-8 text-center">
           <div
-            className="mx-auto flex h-11 w-11 items-center justify-center"
+            className="mx-auto flex h-12 w-12 items-center justify-center"
             style={{
-              borderRadius: 'var(--radius, 8px)',
+              borderRadius: 'var(--radius-sm, 12px)',
               backgroundColor: 'var(--c-accent-soft)',
               color: 'var(--c-accent)',
             }}
           >
-            <AlertIcon size={19} />
+            <AlertIcon size={20} />
           </div>
-          <h1 className="mt-4 text-[14px] font-semibold text-ink">Профиль не найден</h1>
+          <h1 className="display mt-4 text-[15px] font-semibold text-ink">Профиль не найден</h1>
           <p className="mt-2 text-[12px] leading-relaxed text-muted">
             Для аккаунта {user?.email || 'пользователя'} профиль ещё не создан на сервере.
           </p>
@@ -166,16 +169,16 @@ export default function AppLayout() {
       >
         <div className="card w-full max-w-sm px-7 py-8 text-center">
           <div
-            className="mx-auto flex h-11 w-11 items-center justify-center"
+            className="mx-auto flex h-12 w-12 items-center justify-center"
             style={{
-              borderRadius: 'var(--radius, 8px)',
-              backgroundColor: 'color-mix(in srgb, var(--c-negative) 14%, transparent)',
+              borderRadius: 'var(--radius-sm, 12px)',
+              backgroundColor: 'color-mix(in srgb, var(--c-negative) 16%, transparent)',
               color: 'var(--c-negative)',
             }}
           >
-            <AlertIcon size={19} />
+            <AlertIcon size={20} />
           </div>
-          <h1 className="mt-4 text-[14px] font-semibold text-ink">
+          <h1 className="display mt-4 text-[15px] font-semibold text-ink">
             Не удалось загрузить профиль
           </h1>
           <p className="mt-2 break-words text-[12px] leading-relaxed text-muted">
@@ -213,128 +216,195 @@ export default function AppLayout() {
   return (
     <div className="flex h-full" style={{ backgroundColor: 'var(--c-canvas)' }}>
       <aside
-        className="flex w-[248px] shrink-0 flex-col border-r px-3.5 py-5"
-        style={{
-          borderColor: 'var(--c-line)',
-          borderWidth: 'var(--border-width, 1px)',
-          backgroundColor: 'var(--c-sidebar)',
-        }}
+        className="hidden w-64 shrink-0 flex-col overflow-y-auto px-3 py-5 lg:flex"
+        style={{ backgroundColor: 'var(--c-sidebar)' }}
       >
-        <div className="flex items-center gap-2.5 px-1.5">
-          <span
-            className="flex h-8 w-8 items-center justify-center"
-            style={{
-              borderRadius: 'var(--radius, 8px)',
-              backgroundColor: 'var(--c-accent)',
-              color: 'var(--c-accent-ink)',
-            }}
-          >
-            <SparkIcon size={16} />
-          </span>
-          <div className="leading-tight">
-            <p className="display text-[16px] font-semibold tracking-tight text-ink">Talis</p>
-            <p className="mt-0.5 text-[9.5px] font-medium uppercase tracking-[0.16em] text-muted">
-              {new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short' }).format(
-                new Date(),
-              )}
+        <div className="flex items-start justify-between px-2">
+          <div>
+            <p
+              className="display text-[34px] font-extrabold leading-none tracking-tight"
+              style={{ color: 'var(--c-ink)' }}
+            >
+              talis
+            </p>
+            <p
+              className="mt-2 text-[9px] font-bold uppercase tracking-[0.2em]"
+              style={{ color: 'var(--c-accent)' }}
+            >
+              Расти в своём ритме
             </p>
           </div>
+
+          <span
+            className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center"
+            style={{
+              borderRadius: 'calc(var(--radius-sm, 12px) * 0.9)',
+              backgroundColor: 'color-mix(in srgb, var(--c-accent) 18%, transparent)',
+              color: 'var(--c-accent)',
+            }}
+            aria-hidden="true"
+          >
+            <FlameIcon size={17} />
+          </span>
         </div>
 
-        <p className="mt-6 px-2.5 text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted">
-          Навигация
-        </p>
+        <p className="eyebrow mt-7 px-2 font-semibold">Твоё пространство</p>
 
-        <nav className="mt-2 flex flex-col gap-0.5">
+        <nav className="mt-2 flex flex-col gap-1" aria-label="Основная навигация">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon
 
             return (
               <NavLink key={item.to} to={item.to} end={item.end} className="nav-link">
-                <Icon size={15} />
+                <Icon size={18} />
                 <span className="flex-1">{item.label}</span>
                 {item.to === '/tasks' && activeCount > 0 ? (
-                  <span
-                    className="px-1.5 py-0.5 text-[10px] font-semibold"
-                    style={{
-                      borderRadius: 'var(--radius, 8px)',
-                      backgroundColor: 'var(--c-accent-soft)',
-                      color: 'var(--c-accent)',
-                    }}
-                  >
-                    {activeCount}
-                  </span>
+                  <span className="nav-badge">{activeCount}</span>
                 ) : null}
               </NavLink>
             )
           })}
         </nav>
 
-        <div className="mt-auto space-y-3">
-          <div className="card p-3.5">
+        <div className="mt-auto pt-8">
+          <div
+            className="px-4 py-4"
+            style={{
+              borderRadius: 'var(--radius-lg, 24px)',
+              backgroundColor: 'color-mix(in srgb, var(--c-accent) 16%, var(--c-canvas))',
+            }}
+          >
+            <span
+              className="inline-flex h-6 items-center px-2.5 text-[9px] font-semibold uppercase tracking-[0.1em]"
+              style={{
+                borderRadius: 'calc(var(--radius-sm, 12px) * 0.8)',
+                backgroundColor: 'var(--c-positive)',
+                color: 'var(--c-cta-ink)',
+              }}
+            >
+              Твой темп — ок
+            </span>
+            <p className="mt-3 text-[13px] font-bold leading-5 text-ink">Маленькие шаги.</p>
+            <p className="text-[13px] font-bold leading-5 text-ink">Большой прогресс.</p>
+            <p className="mt-2.5 text-[11px] leading-relaxed" style={{ color: 'var(--c-muted)' }}>
+              Каждая задача даёт XP. {activeCount > 0 ? `Сейчас в работе: ${activeCount}.` : ''}
+            </p>
+          </div>
+
+          <div className="mt-4">
+            <ThemeSwitcher />
+          </div>
+
+          <div
+            className="mt-3 p-3.5"
+            style={{ borderRadius: 'var(--radius)', backgroundColor: 'var(--c-raised)' }}
+          >
             <div className="flex items-center gap-2.5">
               <span
-                className="flex h-8 w-8 items-center justify-center text-[12px] font-semibold"
+                className="flex h-9 w-9 shrink-0 items-center justify-center text-[13px] font-bold"
                 style={{
-                  borderRadius: 'var(--radius, 8px)',
+                  borderRadius: 'calc(var(--radius-sm, 12px) * 0.8)',
                   backgroundColor: 'var(--c-accent-soft)',
                   color: 'var(--c-accent)',
                 }}
               >
                 {initial}
               </span>
-              <div className="min-w-0 leading-tight">
+              <div className="min-w-0 flex-1 leading-tight">
                 <p className="truncate text-[12px] font-semibold text-ink">{nickname}</p>
                 <p className="mt-0.5 text-[10px] text-muted">
                   {level} {plural(level, 'уровень', 'уровня', 'уровней')}
                 </p>
               </div>
+              <LogoutButton variant="icon" />
             </div>
 
-            <div
-              className="mt-3 h-1.5 overflow-hidden rounded-full"
-              style={{ backgroundColor: 'var(--c-line)' }}
-            >
-              <div
-                className="h-full rounded-full transition-all"
-                style={{ width: `${percent}%`, backgroundColor: 'var(--c-accent)' }}
-              />
+            <div className="mt-3">
+              <ProgressBar value={percent} height="h-1.5" tone="positive" />
             </div>
             <p className="mt-1.5 text-[10px] text-muted">
               {formatXp(currentXp)} / {formatXp(nextLevelUp) || '—'} XP
             </p>
           </div>
 
-          <LogoutButton />
+          <div className="mt-4 px-2">
+            <div className="surface-divider" />
+            <p className="mt-3 text-[10px] leading-relaxed text-muted">Твоё пространство роста</p>
+            <p className="mt-0.5 text-[11px] font-semibold" style={{ color: 'var(--c-accent)' }}>
+              Не спринт. Приключение.
+            </p>
+          </div>
         </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header
-          className="flex h-[60px] shrink-0 items-center gap-4 border-b px-6"
-          style={{
-            borderColor: 'var(--c-line)',
-            borderWidth: 'var(--border-width, 1px)',
-            backgroundColor: 'var(--c-surface)',
-          }}
+          className="flex h-16 shrink-0 items-center gap-3 px-4 sm:px-6 lg:px-8"
+          style={{ backgroundColor: 'var(--c-canvas)', borderBottom: '1px solid var(--c-line)' }}
         >
-          <div className="min-w-0">
-            <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted">
-              {meta.eyebrow}
-            </p>
-            <h1 className="display truncate text-[16px] font-semibold leading-tight text-ink">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="hidden text-[12px] text-muted md:inline">Моё пространство</span>
+            <span className="hidden text-[12px] text-muted md:inline" aria-hidden="true">
+              /
+            </span>
+            <h1 className="display truncate text-[13.5px] font-semibold leading-tight text-ink">
               {meta.title}
             </h1>
           </div>
 
-          <div className="ml-auto flex items-center gap-3">
-            <span className="hidden text-[11px] text-muted sm:inline">{today}</span>
-            <ThemeSwitcher />
+          <span className="chip ml-1 hidden h-6 items-center px-2.5 text-[9px] font-semibold uppercase tracking-[0.1em] sm:inline-flex">
+            {today}
+          </span>
+
+          <div className="ml-auto flex items-center gap-2">
+            <span
+              className="inline-flex h-7 items-center px-3 text-[10px] font-semibold uppercase tracking-[0.06em]"
+              style={{
+                borderRadius: 'calc(var(--radius-sm, 12px) * 0.85)',
+                backgroundColor: 'var(--c-cta)',
+                color: 'var(--c-cta-ink)',
+              }}
+              title={`Уровень ${level}`}
+            >
+              {level} ур.
+            </span>
+
+            <div className="lg:hidden">
+              <ThemeSwitcher compact />
+            </div>
+
+            <div className="lg:hidden">
+              <LogoutButton variant="icon" />
+            </div>
           </div>
         </header>
 
-        <main className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
-          <Outlet />
+        <nav
+          className="flex shrink-0 items-center gap-1 overflow-x-auto px-3 py-2 lg:hidden"
+          style={{ backgroundColor: 'var(--c-sidebar)' }}
+          aria-label="Основная навигация"
+        >
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon
+
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className="nav-link shrink-0 !h-9 !px-3 text-[12px]"
+              >
+                <Icon size={14} />
+                <span>{item.label}</span>
+              </NavLink>
+            )
+          })}
+        </nav>
+
+        <main className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
+          <div className="mx-auto w-full max-w-[1400px]">
+            <Outlet />
+          </div>
         </main>
       </div>
 

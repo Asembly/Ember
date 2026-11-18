@@ -48,26 +48,14 @@ export default function Achievements() {
 
   return (
     <div className="space-y-4">
-      <section
-        className="border p-5"
-        style={{
-          borderColor: 'var(--c-ink)',
-          borderWidth: 'var(--border-width, 1px)',
-          borderRadius: 'var(--radius, 8px)',
-          backgroundColor: 'var(--c-surface)',
-          boxShadow: 'var(--shadow)',
-        }}
-      >
+      <section className="card card-lg p-5">
         <div className="flex flex-wrap items-start gap-4">
           <div
-            className="flex h-14 w-14 shrink-0 -rotate-6 items-center justify-center border"
+            className="flex h-14 w-14 shrink-0 items-center justify-center"
             style={{
-              borderColor: 'var(--c-ink)',
-              borderWidth: 'var(--border-width, 1px)',
-              borderRadius: 'var(--radius, 8px)',
+              borderRadius: 'calc(var(--radius-sm, 12px) * 1.1)',
               backgroundColor: 'var(--c-accent)',
               color: 'var(--c-accent-ink)',
-              boxShadow: 'var(--shadow)',
             }}
           >
             <TrophyIcon size={26} />
@@ -79,37 +67,40 @@ export default function Achievements() {
               <AchievementProgressSummary unlocked={unlockedCount} total={total} />
             </div>
 
-            <p className="mt-1 text-[12px] leading-relaxed text-muted">
+            <p className="mt-1 max-w-xl text-[11.5px] leading-relaxed text-muted">
               Прогресс считается по вашим задачам, сессиям и уровню профиля.
             </p>
 
-            <div className="mt-3">
-              <ProgressBar value={total > 0 ? (unlockedCount / total) * 100 : 0} height="h-2.5" />
+            <div className="mt-3 max-w-2xl">
+              <ProgressBar
+                value={total > 0 ? (unlockedCount / total) * 100 : 0}
+                height="h-2"
+                tone="positive"
+              />
             </div>
           </div>
 
           <div className="flex flex-col items-end gap-1">
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-muted">
-              Уровень
-            </span>
+            <span className="eyebrow">Уровень</span>
             <span className="stat-value">{profile?.level ?? 0}</span>
-            <span className="text-[10.5px] text-muted">
-              {formatXp(profile?.currentXp)} / {profile?.nextLevelUp ? formatXp(profile.nextLevelUp) : '—'}
+            <span className="text-[10px] text-muted">
+              {formatXp(profile?.currentXp)} / {profile?.nextLevelUp ? formatXp(profile.nextLevelUp) : '—'} XP
             </span>
             <div className="w-[132px]">
-              <ProgressBar value={levelPercent} height="h-1.5" />
+              <ProgressBar value={levelPercent} height="h-1.5" tone="positive" />
             </div>
           </div>
         </div>
 
-        <div className="mt-4 grid gap-2.5 sm:grid-cols-3">
+        <div className="mt-5 grid gap-2.5 sm:grid-cols-3">
           {[
-            { icon: TrophyIcon, label: 'Получено', value: `${unlockedCount} из ${total}` },
-            { icon: SparkIcon, label: 'Задач закрыто', value: doneTasks },
+            { icon: TrophyIcon, label: 'Получено', value: `${unlockedCount} из ${total}`, tone: 'var(--c-accent)' },
+            { icon: SparkIcon, label: 'Задач закрыто', value: doneTasks, tone: 'var(--c-positive)' },
             {
               icon: ClockIcon,
               label: 'Время в сессиях',
               value: totalMinutes > 0 ? formatDuration(totalMinutes) : '—',
+              tone: 'var(--c-warning)',
             },
           ].map((card) => {
             const Icon = card.icon
@@ -117,20 +108,24 @@ export default function Achievements() {
             return (
               <div
                 key={card.label}
-                className="flex items-center gap-2.5 border px-3 py-2"
-                style={{
-                  borderColor: 'var(--c-ink)',
-                  borderWidth: 'var(--border-width, 1px)',
-                  borderRadius: 'var(--radius, 8px)',
-                  backgroundColor: 'var(--c-canvas)',
-                }}
+                className="flex items-center gap-3 px-3.5 py-3"
+                style={{ borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--c-sunken)' }}
               >
-                <Icon size={15} />
+                <span
+                  className="flex h-8 w-8 shrink-0 items-center justify-center"
+                  style={{
+                    borderRadius: 'calc(var(--radius-sm, 12px) * 0.7)',
+                    backgroundColor: 'color-mix(in srgb, var(--c-ink) 6%, transparent)',
+                    color: card.tone,
+                  }}
+                >
+                  <Icon size={15} />
+                </span>
                 <div className="min-w-0">
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.1em] text-muted">
+                  <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-muted">
                     {card.label}
                   </p>
-                  <p className="truncate text-[13px] font-bold">{card.value}</p>
+                  <p className="truncate text-[13px] font-semibold text-ink">{card.value}</p>
                 </div>
               </div>
             )
@@ -140,26 +135,20 @@ export default function Achievements() {
 
       {closest ? (
         <section
-          className="flex flex-wrap items-center gap-3 border px-4 py-3"
-          style={{
-            borderColor: 'var(--c-ink)',
-            borderWidth: 'var(--border-width, 1px)',
-            borderRadius: 'var(--radius, 8px)',
-            backgroundColor: 'var(--c-accent-soft)',
-            boxShadow: 'var(--shadow)',
-          }}
+          className="flex flex-wrap items-center gap-3 px-4 py-3.5"
+          style={{ borderRadius: 'var(--radius)', backgroundColor: 'var(--c-accent-soft)' }}
         >
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-muted">
+          <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-muted">
             Ближайшая цель
           </span>
-          <span className="text-[12.5px] font-bold">{closest.name}</span>
-          <span className="text-[11.5px] text-muted">
+          <span className="text-[12px] font-semibold text-ink">{closest.name}</span>
+          <span className="text-[10.5px] text-muted">
             {closest.current} / {closest.goal} {closest.unit}
           </span>
           <div className="min-w-[110px] flex-1">
             <ProgressBar value={closest.percent} height="h-1.5" />
           </div>
-          <span className="text-[11px] font-bold">{closest.percent}%</span>
+          <span className="text-[11px] font-bold text-accent">{closest.percent}%</span>
         </section>
       ) : null}
 
@@ -173,15 +162,7 @@ export default function Achievements() {
               type="button"
               onClick={() => setFilter(item.id)}
               aria-pressed={active}
-              className="border px-3 py-1.5 text-[11px] font-bold transition"
-              style={{
-                borderColor: 'var(--c-ink)',
-                borderWidth: 'var(--border-width, 1px)',
-                borderRadius: 'var(--radius, 8px)',
-                backgroundColor: active ? 'var(--c-accent)' : 'transparent',
-                color: active ? 'var(--c-accent-ink)' : 'var(--c-muted)',
-                boxShadow: active ? 'var(--shadow)' : 'none',
-              }}
+              className="tab"
             >
               {item.label}
             </button>
@@ -201,12 +182,10 @@ export default function Achievements() {
 
       {error ? (
         <div
-          className="flex items-start gap-2 border px-3 py-2 text-[11.5px] font-semibold"
+          className="flex items-start gap-2 px-3 py-2 text-[11.5px] font-semibold"
           style={{
-            borderColor: 'var(--c-ink)',
-            borderWidth: 'var(--border-width, 1px)',
-            borderRadius: 'var(--radius, 8px)',
-            backgroundColor: 'var(--c-accent-soft)',
+            borderRadius: 'var(--radius-sm)',
+            backgroundColor: 'color-mix(in srgb, var(--c-negative) 12%, transparent)',
             color: 'var(--c-negative)',
           }}
           role="alert"
@@ -221,28 +200,17 @@ export default function Achievements() {
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
-              className="h-[132px] animate-pulse border"
-              style={{
-                borderColor: 'var(--c-line)',
-                borderWidth: 'var(--border-width, 1px)',
-                borderRadius: 'var(--radius, 8px)',
-                backgroundColor: 'var(--c-surface)',
-              }}
+              className="h-[132px] animate-pulse"
+              style={{ borderRadius: 'var(--radius)', backgroundColor: 'var(--c-surface)' }}
             />
           ))}
         </div>
       ) : visible.length === 0 ? (
         <div
-          className="border px-5 py-8 text-center"
-          style={{
-            borderColor: 'var(--c-ink)',
-            borderWidth: 'var(--border-width, 1px)',
-            borderRadius: 'var(--radius, 8px)',
-            backgroundColor: 'var(--c-surface)',
-            boxShadow: 'var(--shadow)',
-          }}
+          className="px-5 py-10 text-center"
+          style={{ borderRadius: 'var(--radius)', backgroundColor: 'var(--c-surface)' }}
         >
-          <p className="text-[13px] font-bold">
+          <p className="text-[13px] font-semibold text-ink">
             {filter === 'UNLOCKED' ? 'Пока ничего не получено' : 'Всё уже открыто'}
           </p>
           <p className="mt-1 text-[11.5px] text-muted">

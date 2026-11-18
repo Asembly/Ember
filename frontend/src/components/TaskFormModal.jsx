@@ -208,7 +208,7 @@ export default function TaskFormModal({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3.5">
+        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div>
             <label className="label" htmlFor="task-difficulty">
               Сложность
@@ -249,9 +249,10 @@ export default function TaskFormModal({
               <button
                 type="button"
                 onClick={onOpenLibrary}
-                className="mt-1.5 flex w-full items-center justify-center gap-2 radius-theme border border-dashed px-3 py-2 text-[11.5px] font-semibold transition hover:border-transparent"
+                className="mt-1.5 flex min-h-[38px] w-full items-center justify-center gap-2 border border-dashed px-3 py-2 text-[11.5px] font-semibold transition hover:border-transparent"
                 style={{
-                  borderColor: 'var(--c-line)',
+                  borderRadius: 'var(--radius-sm, 12px)',
+                  borderColor: 'color-mix(in srgb, var(--c-accent) 35%, var(--c-line))',
                   color: 'var(--c-accent)',
                   backgroundColor: 'var(--c-accent-soft)',
                 }}
@@ -277,7 +278,7 @@ export default function TaskFormModal({
           </button>
         ) : null}
 
-        <div className="grid grid-cols-2 gap-3.5">
+        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div>
             <label className="label" htmlFor="task-scheduled">
               Начало
@@ -320,19 +321,18 @@ export default function TaskFormModal({
                     type="button"
                     onClick={() => toggleTag(tag.id)}
                     aria-pressed={selected}
-                    className="inline-flex items-center gap-1.5 border px-2.5 py-1 text-[11px] font-bold transition"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10.5px] font-medium transition"
                     style={{
-                      borderColor: 'var(--c-ink)',
-                      borderWidth: 'var(--border-width, 1px)',
-                      borderRadius: 'var(--radius, 8px)',
-                      backgroundColor: selected ? hex : 'transparent',
-                      color: selected ? '#141018' : 'var(--c-muted)',
-                      boxShadow: selected ? 'var(--shadow)' : 'none',
+                      border: '1px solid',
+                      borderColor: selected ? hex : 'var(--c-line)',
+                      borderRadius: 'calc(var(--radius-sm, 12px) * 0.7)',
+                      backgroundColor: selected ? `color-mix(in srgb, ${hex} 22%, transparent)` : 'transparent',
+                      color: selected ? 'var(--c-ink)' : 'var(--c-muted)',
                     }}
                   >
                     <span
-                      className="h-2 w-2 rounded-full border"
-                      style={{ borderColor: 'var(--c-ink)', backgroundColor: hex }}
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: hex }}
                     />
                     {tag.name}
                   </button>
@@ -381,13 +381,12 @@ export default function TaskFormModal({
                       onClick={() => setTagColor(color)}
                       aria-label={TAG_COLOR_LABELS[color] || color}
                       title={TAG_COLOR_LABELS[color] || color}
-                      className="h-[18px] w-[18px] border transition"
+                      className="h-[18px] w-[18px] transition"
                       style={{
-                        borderColor: selected ? 'var(--c-ink)' : 'var(--c-line)',
-                        borderWidth: 'var(--border-width, 1px)',
-                        borderRadius: 'calc(var(--radius, 8px) * 0.45)',
+                        border: selected ? '2px solid var(--c-ink)' : '1px solid var(--c-line)',
+                        borderRadius: 'calc(var(--radius-sm, 12px) * 0.45)',
                         backgroundColor: tagColorHex(color),
-                        transform: selected ? 'scale(1.15)' : 'none',
+                        transform: selected ? 'scale(1.12)' : 'none',
                       }}
                     />
                   )
@@ -416,7 +415,14 @@ export default function TaskFormModal({
         ) : null}
 
         {submitError ? (
-          <p className="flex items-start gap-2 radius-theme px-3 py-2 text-[11.5px] leading-snug" style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-negative)' }}>
+          <p
+            className="flex items-start gap-2 px-3 py-2 text-[11px] leading-snug"
+            style={{
+              borderRadius: 'var(--radius-sm, 12px)',
+              backgroundColor: 'color-mix(in srgb, var(--c-negative) 12%, transparent)',
+              color: 'var(--c-negative)',
+            }}
+          >
             <AlertIcon size={14} className="mt-0.5 shrink-0" />
             {submitError}
           </p>

@@ -13,7 +13,7 @@ function createWindow() {
     minHeight: 720,
     show: false,
     title: 'Talis',
-    backgroundColor: '#140f17',
+    backgroundColor: '#18181B',
     autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: true,

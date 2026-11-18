@@ -52,18 +52,13 @@ export default function Login() {
       footer={
         <>
           Нет аккаунта?{' '}
-          <Link to="/register" className="font-bold underline decoration-2 underline-offset-2" style={{ color: 'var(--c-accent)' }}>
+          <Link to="/register" className="font-semibold underline-offset-2 hover:underline" style={{ color: 'var(--c-accent)' }}>
             Создать
           </Link>
         </>
       }
     >
-      <form
-        onSubmit={handleSubmit}
-        className="mt-5 flex flex-col"
-        style={{ gap: 'calc(var(--spacing, 0.75rem) * 1.1)' }}
-        noValidate
-      >
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3.5" noValidate>
         <div>
           <label htmlFor="login-email" className="label">
             Почта
@@ -71,7 +66,7 @@ export default function Login() {
           <input
             id="login-email"
             type="email"
-            className="input mt-1.5 w-full"
+            className="input w-full"
             value={form.email}
             onChange={update('email')}
             placeholder="you@example.com"
@@ -87,7 +82,7 @@ export default function Login() {
           <input
             id="login-password"
             type="password"
-            className="input mt-1.5 w-full"
+            className="input w-full"
             value={form.password}
             onChange={update('password')}
             placeholder="Пароль"
@@ -95,7 +90,7 @@ export default function Login() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary w-full" disabled={busy}>
+        <button type="submit" className="btn btn-primary mt-2 w-full" disabled={busy}>
           {busy ? 'Входим…' : 'Войти'}
         </button>
       </form>

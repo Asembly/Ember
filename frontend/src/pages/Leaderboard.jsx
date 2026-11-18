@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import EmptyState from '../components/EmptyState'
 import Skeleton from '../components/Skeleton'
 import { AlertIcon, CrownIcon, RefreshIcon } from '../components/icons'
@@ -11,37 +11,28 @@ function initialOf(nickname) {
 
 function rankStyle(rank) {
   if (rank === 1) {
-    return { backgroundColor: 'var(--c-accent)', color: 'var(--c-accent-ink)' }
+    return { backgroundColor: 'var(--c-cta)', color: 'var(--c-cta-ink)' }
   }
 
   if (rank <= 3) {
     return { backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-accent)' }
   }
 
-  return { backgroundColor: 'var(--c-raised)', color: 'var(--c-muted)' }
-}
-
-function cardStyle(rank) {
-  if (rank > 3) return undefined
-
-  return {
-    borderColor: `color-mix(in srgb, var(--c-accent) ${rank === 1 ? 38 : 22}%, var(--c-line))`,
-    backgroundColor: `color-mix(in srgb, var(--c-surface) ${rank === 1 ? 94 : 97}%, var(--c-accent))`,
-  }
+  return { backgroundColor: 'var(--c-sunken)', color: 'var(--c-muted)' }
 }
 
 function LeaderboardSkeleton() {
   return (
-    <div className="space-y-2.5" aria-busy="true" aria-label="Загружаем рейтинг">
+    <div className="space-y-2" aria-busy="true" aria-label="Загружаем рейтинг">
       {Array.from({ length: 6 }).map((_, index) => (
         <div key={index} className="card flex items-center gap-3 px-4 py-3">
-          <Skeleton className="h-7 w-7 shrink-0" rounded="radius-theme" />
-          <Skeleton className="h-9 w-9 shrink-0" rounded="radius-theme" />
-          <div className="min-w-0 flex-1 space-y-1.5">
-            <Skeleton className="h-3 w-32" rounded="radius-theme" />
-            <Skeleton className="h-2.5 w-20" rounded="radius-theme" />
+          <Skeleton className="h-8 w-8 shrink-0" rounded="radius-theme-sm" />
+          <Skeleton className="h-10 w-10 shrink-0" rounded="radius-theme-sm" />
+          <div className="min-w-0 flex-1 space-y-2">
+            <Skeleton className="h-3 w-32" rounded="radius-theme-sm" />
+            <Skeleton className="h-1.5 w-40" rounded="radius-theme-sm" />
           </div>
-          <Skeleton className="h-3 w-14 shrink-0" rounded="radius-theme" />
+          <Skeleton className="h-4 w-14 shrink-0" rounded="radius-theme-sm" />
         </div>
       ))}
     </div>
@@ -60,27 +51,35 @@ export default function Leaderboard() {
   }, [fetchLeaderboard])
 
   const initialLoading = isLoading && users.length === 0
+  const topXp = useMemo(
+    () => Math.max(1, ...users.map((user) => Number(user.currentXp) || 0)),
+    [users],
+  )
 
   return (
     <div className="space-y-4">
-      <section className="card flex flex-wrap items-center gap-3.5 px-4 py-3.5 sm:px-5">
+      <section className="card card-lg flex flex-wrap items-center gap-4 p-5">
         <span
-          className="flex h-10 w-10 shrink-0 items-center justify-center radius-theme"
-          style={{ backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-accent)' }}
+          className="flex h-12 w-12 shrink-0 items-center justify-center"
+          style={{
+            borderRadius: 'calc(var(--radius-sm, 12px) * 1.05)',
+            backgroundColor: 'var(--c-accent)',
+            color: 'var(--c-accent-ink)',
+          }}
         >
-          <CrownIcon size={18} />
+          <CrownIcon size={22} />
         </span>
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="section-title">Топ игроков</h2>
+            <h2 className="page-title">Топ игроков</h2>
             {users.length > 0 ? (
-              <span className="chip">
+              <span className="chip chip-accent h-5 px-2 text-[9.5px] font-semibold">
                 {users.length} {plural(users.length, 'участник', 'участника', 'участников')}
               </span>
             ) : null}
           </div>
-          <p className="mt-0.5 text-[11.5px] leading-relaxed text-muted">
+          <p className="mt-1 text-[11.5px] leading-relaxed text-muted">
             Участники отсортированы по уровню и опыту — сверху самые продвинутые.
           </p>
         </div>
@@ -124,12 +123,13 @@ export default function Leaderboard() {
           />
         )
       ) : (
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           {error ? (
             <div
-              className="card flex flex-wrap items-center gap-2 px-4 py-2.5 text-[11.5px]"
+              className="flex flex-wrap items-center gap-2 px-4 py-2.5 text-[11.5px]"
               style={{
-                borderColor: 'color-mix(in srgb, var(--c-negative) 30%, var(--c-line))',
+                borderRadius: 'var(--radius-sm)',
+                backgroundColor: 'color-mix(in srgb, var(--c-negative) 12%, transparent)',
                 color: 'var(--c-negative)',
               }}
               role="alert"
@@ -147,50 +147,81 @@ export default function Leaderboard() {
             </div>
           ) : null}
 
-          <ol className="space-y-2.5" aria-label="Рейтинг участников">
+          <ol className="space-y-2" aria-label="Рейтинг участников">
             {users.map((user, index) => {
               const rank = index + 1
+              const share = Math.min(100, ((Number(user.currentXp) || 0) / topXp) * 100)
+              const isTop = rank <= 3
 
               return (
                 <li key={user.id ?? `rank-${rank}`}>
                   <article
-                    className="card card-hover flex items-center gap-3 px-4 py-3"
-                    style={cardStyle(rank)}
+                    className="card card-hover flex items-center gap-3 px-3.5 py-3"
+                    style={{
+                      borderColor: isTop
+                        ? `color-mix(in srgb, var(--c-accent) ${rank === 1 ? 30 : 18}%, transparent)`
+                        : 'transparent',
+                      backgroundColor:
+                        rank === 1
+                          ? 'color-mix(in srgb, var(--c-surface) 94%, var(--c-accent))'
+                          : 'var(--c-surface)',
+                    }}
                   >
                     <span
-                      className="flex h-7 w-7 shrink-0 items-center justify-center radius-theme text-[11.5px] font-semibold"
-                      style={rankStyle(rank)}
+                      className="flex h-8 w-8 shrink-0 items-center justify-center text-[11.5px] font-bold"
+                      style={{
+                        borderRadius: 'calc(var(--radius-sm, 12px) * 0.75)',
+                        ...rankStyle(rank),
+                      }}
                       aria-label={`Место ${rank}`}
                     >
                       {rank}
                     </span>
 
                     <span
-                      className="flex h-9 w-9 shrink-0 items-center justify-center radius-theme text-[13px] font-semibold"
-                      style={
-                        rank === 1
-                          ? { backgroundColor: 'var(--c-accent)', color: 'var(--c-accent-ink)' }
-                          : { backgroundColor: 'var(--c-accent-soft)', color: 'var(--c-accent)' }
-                      }
+                      className="flex h-10 w-10 shrink-0 items-center justify-center text-[13px] font-bold"
+                      style={{
+                        borderRadius: 'calc(var(--radius-sm, 12px) * 0.9)',
+                        backgroundColor:
+                          rank === 1 ? 'var(--c-accent)' : 'color-mix(in srgb, var(--c-ink) 7%, transparent)',
+                        color: rank === 1 ? 'var(--c-accent-ink)' : 'var(--c-ink)',
+                      }}
                       aria-hidden="true"
                     >
                       {initialOf(user.nickname)}
                     </span>
 
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[12.5px] font-semibold text-ink">
-                        {user.nickname}
-                      </p>
-                      <p className="mt-0.5 text-[10.5px] text-muted">
-                        {user.level} {plural(user.level, 'уровень', 'уровня', 'уровней')}
-                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="truncate text-[12.5px] font-semibold text-ink">
+                          {user.nickname}
+                        </p>
+                        <span className="chip h-5 px-2 text-[9px] font-semibold">
+                          {user.level} {plural(user.level, 'уровень', 'уровня', 'уровней')}
+                        </span>
+                      </div>
+
+                      <div
+                        className="mt-1.5 h-[4px] w-full max-w-[220px] overflow-hidden"
+                        style={{ borderRadius: 999, backgroundColor: 'var(--c-raised)' }}
+                        aria-hidden="true"
+                      >
+                        <div
+                          style={{
+                            width: `${share}%`,
+                            height: '100%',
+                            borderRadius: 999,
+                            backgroundColor: rank === 1 ? 'var(--c-cta)' : 'var(--c-accent)',
+                          }}
+                        />
+                      </div>
                     </div>
 
                     <div className="shrink-0 text-right">
-                      <p className="mono-time text-[12.5px] font-semibold text-ink">
+                      <p className="text-[12.5px] font-bold" style={{ color: 'var(--c-positive)' }}>
                         {formatXp(user.currentXp)}
                       </p>
-                      <p className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-muted">
+                      <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-muted">
                         XP
                       </p>
                     </div>

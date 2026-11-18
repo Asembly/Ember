@@ -208,141 +208,128 @@ export default function Tasks() {
 
     return (
         <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-2">
-                <div className="relative min-w-[180px] flex-1 sm:max-w-[280px]">
-                    <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">
-                        <SearchIcon size={14} />
-                    </span>
-                    <input
-                        value={query}
-                        onChange={(event) => setQuery(event.target.value)}
-                        className="input w-full pl-9"
-                        placeholder="Поиск задач"
-                        aria-label="Поиск задач"
-                    />
+            <section className="card card-lg p-4 sm:p-5">
+                <div className="flex flex-wrap items-center gap-2">
+                    <div className="relative min-w-[180px] flex-1 sm:max-w-[320px]">
+                        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">
+                            <SearchIcon size={14} />
+                        </span>
+                        <input
+                            value={query}
+                            onChange={(event) => setQuery(event.target.value)}
+                            className="input w-full pl-9"
+                            placeholder="Поиск задач"
+                            aria-label="Поиск задач"
+                        />
+                    </div>
+
+                    <div className="ml-auto flex items-center gap-2">
+                        <button
+                            type="button"
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => setLibraryOpen(true)}
+                        >
+                            <LayersIcon size={13} />
+                            Действия
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-primary btn-sm"
+                            onClick={() => setFormOpen(true)}
+                        >
+                            <PlusIcon size={13} />
+                            Новая задача
+                        </button>
+                    </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 overflow-x-auto">
-                    {STATUS_FILTERS.map((filter) => {
-                        const active = statusFilter === filter.id
-
-                        return (
-                            <button
-                                key={filter.id}
-                                type="button"
-                                onClick={() => setStatusFilter(filter.id)}
-                                aria-pressed={active}
-                                className="whitespace-nowrap radius-theme border px-2.5 py-1.5 text-[11px] font-medium transition"
-                                style={{
-                                    borderColor: active ? 'transparent' : 'var(--c-line)',
-                                    backgroundColor: active ? 'var(--c-accent)' : 'transparent',
-                                    color: active ? 'var(--c-accent-ink)' : 'var(--c-muted)',
-                                }}
-                            >
-                                {filter.label}
-                            </button>
-                        )
-                    })}
-                </div>
-
-                <select
-                    value={difficultyFilter}
-                    onChange={(event) => setDifficultyFilter(event.target.value)}
-                    className="input h-[34px] w-[150px] text-[11.5px]"
-                    aria-label="Сложность"
+                <div
+                    className="mt-3 flex flex-wrap items-center gap-2 pt-3"
+                    style={{ borderTop: '1px solid var(--c-line)' }}
                 >
-                    {DIFFICULTY_FILTERS.map((filter) => (
-                        <option key={filter.id} value={filter.id}>
-                            {filter.label}
-                        </option>
-                    ))}
-                </select>
-
-                <div className="ml-auto flex items-center gap-2">
-                    <button
-                        type="button"
-                        className="btn btn-secondary btn-sm"
-                        onClick={() => setLibraryOpen(true)}
+                    <div
+                        className="flex items-center gap-1 overflow-x-auto"
+                        role="group"
+                        aria-label="Статус задач"
                     >
-                        <LayersIcon size={13} />
-                        Действия
-                    </button>
-                    <button
-                        type="button"
-                        className="btn btn-primary btn-sm"
-                        onClick={() => setFormOpen(true)}
-                    >
-                        <PlusIcon size={13} />
-                        Новая задача
-                    </button>
-                </div>
-            </div>
+                        {STATUS_FILTERS.map((filter) => {
+                            const active = statusFilter === filter.id
 
-            {tags.length > 0 ? (
-                <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="mr-1 inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] text-muted">
-                        <TagIcon size={11} />
-                        Теги
+                            return (
+                                <button
+                                    key={filter.id}
+                                    type="button"
+                                    onClick={() => setStatusFilter(filter.id)}
+                                    aria-pressed={active}
+                                    className="tab shrink-0"
+                                >
+                                    {filter.label}
+                                </button>
+                            )
+                        })}
+                    </div>
+
+                    <select
+                        value={difficultyFilter}
+                        onChange={(event) => setDifficultyFilter(event.target.value)}
+                        className="input h-9 w-[150px] text-[11px]"
+                        aria-label="Сложность"
+                    >
+                        {DIFFICULTY_FILTERS.map((filter) => (
+                            <option key={filter.id} value={filter.id}>
+                                {filter.label}
+                            </option>
+                        ))}
+                    </select>
+
+                    <span className="ml-auto text-[10.5px]" style={{ color: 'var(--c-muted)' }}>
+                        {activeCount}{' '}
+                        {plural(activeCount, 'активная задача', 'активные задачи', 'активных задач')} · всего{' '}
+                        {tasks.length}
+                        {filtersActive ? ` · показано ${filtered.length}` : ''}
                     </span>
-
-                    <button
-                        type="button"
-                        onClick={() => setTagFilter('ALL')}
-                        aria-pressed={tagFilter === 'ALL'}
-                        className="border px-2.5 py-1 text-[11px] font-bold transition"
-                        style={{
-                            borderColor: 'var(--c-ink)',
-                            borderWidth: 'var(--border-width, 1px)',
-                            borderRadius: 'var(--radius, 8px)',
-                            backgroundColor: tagFilter === 'ALL' ? 'var(--c-accent)' : 'transparent',
-                            color: tagFilter === 'ALL' ? 'var(--c-accent-ink)' : 'var(--c-muted)',
-                            boxShadow: tagFilter === 'ALL' ? 'var(--shadow)' : 'none',
-                        }}
-                    >
-                        Все
-                    </button>
-
-                    {tags.map((tag) => {
-                        const active = Number(tagFilter) === Number(tag.id)
-                        const hex = tagColorHex(tag.color)
-
-                        return (
-                            <button
-                                key={tag.id}
-                                type="button"
-                                onClick={() => setTagFilter(active ? 'ALL' : String(tag.id))}
-                                aria-pressed={active}
-                                className="inline-flex items-center gap-1.5 border px-2.5 py-1 text-[11px] font-bold transition"
-                                style={{
-                                    borderColor: 'var(--c-ink)',
-                                    borderWidth: 'var(--border-width, 1px)',
-                                    borderRadius: 'var(--radius, 8px)',
-                                    backgroundColor: active ? hex : 'transparent',
-                                    color: active ? '#141018' : 'var(--c-muted)',
-                                    boxShadow: active ? 'var(--shadow)' : 'none',
-                                }}
-                            >
-                                <span
-                                    className="h-2 w-2 rounded-full border"
-                                    style={{ borderColor: 'var(--c-ink)', backgroundColor: hex }}
-                                />
-                                {tag.name}
-                            </button>
-                        )
-                    })}
                 </div>
-            ) : null}
 
-            <div className="flex items-center justify-between text-[11px] text-muted">
-                <span>
-                    {activeCount} {plural(activeCount, 'активная задача', 'активные задачи', 'активных задач')} ·{' '}
-                    всего {tasks.length}
-                </span>
-                <span>
-                    Показано {filtered.length}
-                    {filtersActive ? ' (фильтр)' : ''}
-                </span>
-            </div>
+                {tags.length > 0 ? (
+                    <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+                        <span className="mr-1 inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-muted">
+                            <TagIcon size={10} />
+                            Теги
+                        </span>
+
+                        <button
+                            type="button"
+                            onClick={() => setTagFilter('ALL')}
+                            aria-pressed={tagFilter === 'ALL'}
+                            className="tab !h-7 !px-2.5 text-[10.5px]"
+                        >
+                            Все
+                        </button>
+
+                        {tags.map((tag) => {
+                            const active = Number(tagFilter) === Number(tag.id)
+                            const hex = tagColorHex(tag.color)
+
+                            return (
+                                <button
+                                    key={tag.id}
+                                    type="button"
+                                    onClick={() => setTagFilter(active ? 'ALL' : String(tag.id))}
+                                    aria-pressed={active}
+                                    className="tab !h-7 !px-2.5 text-[10.5px]"
+                                >
+                                    <span
+                                        className="h-1.5 w-1.5 rounded-full"
+                                        style={{ backgroundColor: hex }}
+                                        aria-hidden="true"
+                                    />
+                                    {tag.name}
+                                </button>
+                            )
+                        })}
+                    </div>
+                ) : null}
+            </section>
 
             {tasks.length === 0 && status !== 'loading' ? (
                 <EmptyState
@@ -378,7 +365,7 @@ export default function Tasks() {
                     }
                 />
             ) : (
-                <div className="grid gap-3.5 md:grid-cols-2 2xl:grid-cols-3">
+                <div className="grid gap-3 xl:grid-cols-2">
                     {filtered.map((task) => (
                         <TaskCard
                             key={task.id}
