@@ -71,23 +71,57 @@ function normalizeActiveTimers(activeByTask) {
 // covered by the profile-id check inside fetchActiveSession.
 let activeSyncRequest = 0
 
+// Session history is requested per profile. The counter and the profile-id
+// check below keep a slow response from another profile out of the store.
+let historySyncRequest = 0
+
 export const useSessionStore = create(
   persist(
     (set, get) => ({
       status: 'idle',
       error: null,
       sessions: [],
+      historyProfileId: null,
       activeByTask: {},
       busyTaskId: null,
 
       async fetchSessions(force = false) {
+        const targetProfileId = useProfileStore.getState().profileId
+
+        if (targetProfileId == null) {
+          set({ sessions: [], historyProfileId: null, status: 'idle', error: null })
+          return
+        }
+
         if (!force && get().status === 'loading') return
+
+        // Never show another profile's sessions while the new request is
+        // in flight (profile switch, re-login).
+        if (Number(get().historyProfileId) !== Number(targetProfileId)) {
+          set({ sessions: [] })
+        }
+
+        const requestId = ++historySyncRequest
         set({ status: 'loading', error: null })
 
         try {
-          const { data } = await sessionApi.list()
-          set({ sessions: sortSessions(Array.isArray(data) ? data : []), status: 'ready' })
+          const { data } = await sessionApi.history(targetProfileId)
+          const currentProfileId = useProfileStore.getState().profileId
+
+          if (
+            requestId !== historySyncRequest ||
+            Number(currentProfileId) !== Number(targetProfileId)
+          ) {
+            return
+          }
+
+          set({
+            sessions: sortSessions(Array.isArray(data) ? data : []),
+            historyProfileId: targetProfileId,
+            status: 'ready',
+          })
         } catch (error) {
+          if (requestId !== historySyncRequest) return
           set({ status: 'error', error: getErrorMessage(error) })
         }
       },

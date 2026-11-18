@@ -94,8 +94,9 @@ ENV: `DB_NAME=db`, `DB_USER=postgres`, `DB_PASSWORD=postgres`, `DB_PORT=5433`, `
 | Метод | Путь | Назначение |
 |---|---|---|
 | POST | `/auth/register`, `/auth/authenticate`, `/auth/refresh-token` | JWT |
-| GET | `/profile/get` | список профилей |
-| GET | `/profile/get/{id}` | профиль |
+| GET | `/profile/get/me` | профиль текущего пользователя (по JWT) — используется фронтом |
+| GET | `/profile/get` | список **всех** профилей — клиентом не используется |
+| GET | `/profile/get/{id}` | профиль по id |
 | GET | `/profile/get/{id}/attribute` | атрибуты профиля |
 | GET | `/profile/get/leaderboard?page=0&limit=10` | лидерборд (0-based, `List<ProfileResponseDto>`) |
 | GET | `/task/get`, `/task/get/{id}`, `/task/get/profile/{profileId}` | задачи |
@@ -104,7 +105,9 @@ ENV: `DB_NAME=db`, `DB_USER=postgres`, `DB_PASSWORD=postgres`, `DB_PORT=5433`, `
 | POST | `/task/{id}/timer/start` | старт сессии |
 | PATCH | `/task/{id}/timer/stop` | стоп сессии |
 | PATCH | `/task/{id}/difficulty` | смена сложности |
-| GET | `/session/get`, `/session/get/{id}` | сессии |
+| GET | `/session/get` | **все** сессии всех пользователей — клиентом не используется |
+| GET | `/session/get/{id}` | одна сессия |
+| GET | `/session/get/history/{profileId}` | история сессий профиля (используется фронтом) |
 | GET | `/session/get/active/{profileId}` | активная сессия профиля, `404` если нет |
 | GET/POST | `/action/get`, `/action/create` | действия |
 | GET/POST | `/tag/get`, `/tag/get/{id}`, `/tag/create` | теги |
@@ -154,7 +157,7 @@ ActiveSessionResponseDto(Long sessionId, Long taskId, Instant startedAt)
 | Стор | Роль | Persist |
 |---|---|---|
 | `authStore` | login/register/logout, JWT-identity, `handleUnauthorized` | токены в `localStorage['talis.auth']` (не через persist-middleware) |
-| `profileStore` | профиль + атрибуты, `init()`, `refresh()` | — |
+| `profileStore` | профиль через `/profile/get/me` + атрибуты, `init()`, `refresh()` | — |
 | `taskStore` | задачи, действия, теги, статусы | — |
 | `sessionStore` | сессии, `activeByTask`, start/stop, `fetchActiveSession` | `talis.activeTimers` |
 | `pomodoroStore` | фазы focus/short/long, пресеты 15/25/50, связь с сессией | `talis.pomodoro` |
@@ -296,13 +299,25 @@ logout; шапка 64px с хлебными крошками, датой и чи
 - дедупликация по `id` (и внутри батча, и с уже загруженными);
 - `extractList` понимает и массив, и `{ content: [...] }`.
 
-### 7.5. Профиль без `/me`
+### 7.5. Профиль текущего пользователя (`/profile/get/me`)
 
-Эндпоинта «текущий пользователь» нет: `profileStore.pickProfile()` сопоставляет список профилей с
-`nickname` из JWT (сохранён в `talis.auth`), fallback — первый профиль. Если появится `/profile/me`,
-это место надо заменить.
+Раньше «свой» профиль угадывался по нику из JWT среди **всех** профилей (`/profile/get`), а при
+промахе брался `profiles[0]` — можно было увидеть чужой профиль, задачи и историю. Теперь бэкенд
+отдаёт `GET /profile/get/me` (профиль из аутентифицированного `User`), а `profileStore.init()`
+загружает его напрямую: `profileApi.me()` → `profileId` → атрибуты. `pickProfile` и fallback удалены,
+`/profile/get` фронтом не используется. `404` от `/me` трактуется как `status: 'empty'`
+(«профиль не создан»), а не как повод подставить чужой профиль.
 
-### 7.6. Auth
+### 7.6. История сессий была общей
+
+`GET /session/get` отдаёт сессии **всех** пользователей, поэтому вкладка «История» показывала чужие
+записи. Бэкенд добавил `GET /session/get/history/{profileId}`; фронт переведён на него:
+`sessionApi.history(profileId)`, `fetchSessions` берёт профиль из `profileStore` и не делает запрос
+без него. Добавлены `historyProfileId` (при смене профиля список очищается) и счётчик
+`historySyncRequest` + сверка `profileId` после ответа — поздний ответ другого профиля не попадёт
+в стор. При logout `resetWorkspace` очищает `sessions` и `historyProfileId`.
+
+### 7.7. Auth
 
 Identity берётся из JWT (`sub`/`email`, `nickname`/`name`), пароль не хранится; истёкший access
 не считается авторизацией при старте. `resetWorkspace()` при logout чистит все сторы, **кроме**
@@ -348,6 +363,10 @@ persist-ключей темы/якоря сессий (якорь нужен д�
   Новый компонент — `SegmentBar` (20-сегментный XP-бар).
 - **Таймеры и сессии**: клиентский якорь, `Instant` в DTO, восстановление после logout/reload,
   обработка `404`/`409`, защита от гонок, очистка `active_session` при stop/done/cancel.
+- **История сессий только текущего профиля**: `sessionApi.history(profileId)` →
+  `/session/get/history/{profileId}`, защита от гонок и от подмешивания чужого профиля.
+- **Профиль текущего пользователя**: `GET /profile/get/me` в `profileStore` вместо выбора по нику
+  из общего списка; `pickProfile`/fallback удалены, `404` → явный empty-state.
 
 ### Как проверено
 
@@ -377,8 +396,6 @@ persist-ключей темы/якоря сессий (якорь нужен д�
       (`authApi` ходит напрямую). Решить: удалить или перевести `authApi` на хелпер.
 - [ ] **Хардкод LAN-IP** `192.168.0.180:8080` в `client.js` как fallback — вынести в env/дефолт
       `http://localhost:8080/api/v1`, чтобы не ломалось на другой машине.
-- [ ] **`/profile/me` отсутствует** — выбор профиля по никнейму из JWT хрупок (переименование,
-      дубликаты). Бэкенд-задача на будущее.
 - [ ] **Легаси-якоря таймеров**: сессии, чей `startedAt` был переякорен на «сейчас» до перехода на
       `Instant`, могут показывать меньшее время, пока их не остановят/не запустят заново.
 - [ ] **Нет глобального поиска/настроек** из референса — в приложении нет таких функций,

@@ -41,4 +41,9 @@ public class TimeSessionController {
         return ResponseEntity.ok(sessionService.getActiveSessionByProfileId(profileId));
     }
 
+    @GetMapping("/get/history/{profileId}")
+    public ResponseEntity<List<TimeSessionResponseDto>> getHistoryByProfileId(@PathVariable Long profileId) {
+        return ResponseEntity.ok(sessionService.getTimeSessionHistory(profileId));
+    }
+
 }

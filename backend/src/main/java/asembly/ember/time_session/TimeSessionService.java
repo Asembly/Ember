@@ -2,6 +2,7 @@ package asembly.ember.time_session;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -111,8 +112,21 @@ public class TimeSessionService {
 
     @Transactional(readOnly = true)
     public ActiveSessionResponseDto getActiveSessionByProfileId(Long profileId) {
-        return sessionMapper.toActiveSessionResponseDto(activeSessionRepository.findByProfileId(profileId).orElseThrow(
-                () -> new NotFoundException("session", "profile", profileId)));
+        var session = activeSessionRepository.findByProfileId(profileId);
+        if (session.isPresent())
+            return sessionMapper.toActiveSessionResponseDto(session.get());
+
+        return null;
+    }
+
+    public List<TimeSessionResponseDto> getTimeSessionHistory(Long profileId) {
+        var sessions = sessionRepository.findAllByProfileId(profileId);
+
+        var response = new ArrayList<TimeSessionResponseDto>();
+        for (var s : sessions)
+            response.add(sessionMapper.toTimeSessionResponse(s));
+
+        return response;
     }
 
 }
