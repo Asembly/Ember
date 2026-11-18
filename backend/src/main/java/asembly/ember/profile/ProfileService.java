@@ -96,6 +96,13 @@ public class ProfileService {
         return response;
     }
 
+    public ProfileResponseDto getByUserId(Long userId) {
+        var profile = profileRepository.findByUserId(userId).orElseThrow(
+                () -> new NotFoundException("profile", "userId", userId));
+
+        return profileMapper.toProfileResponseDto(profile);
+    }
+
     public boolean existsById(Long id) {
         return profileRepository.existsById(id);
     }

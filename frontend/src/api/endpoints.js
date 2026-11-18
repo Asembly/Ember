@@ -36,8 +36,9 @@ export const authApi = {
 }
 
 export const profileApi = {
-    list: () => client.get('/profile/get'),
-    byId: (id) => client.get(`/profile/get/${id}`),
+    // The signed-in user's profile. `/profile/get` returns every profile and
+    // must not be used to pick "the current one".
+    me: () => client.get('/profile/get/me'),
     attributes: (id) => client.get(`/profile/get/${id}/attribute`),
     getLeaderboard: (page = 0, limit = 10) =>
         client.get('/profile/get/leaderboard', { params: { page, limit } }),
@@ -57,7 +58,9 @@ export const taskApi = {
 }
 
 export const sessionApi = {
-    list: () => client.get('/session/get'),
+    // Session history is scoped to the signed-in profile: `/session/get` returns
+    // every user's sessions and must not be used by the client.
+    history: (profileId) => client.get(`/session/get/history/${profileId}`),
     byId: (id) => client.get(`/session/get/${id}`),
     active: (profileId) => client.get(`/session/get/active/${profileId}`),
 }

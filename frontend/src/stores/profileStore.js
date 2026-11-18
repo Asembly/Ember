@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { getErrorMessage, readAuth } from '../api/client'
+import { getErrorMessage } from '../api/client'
 import { profileApi } from '../api/endpoints'
 
 function normalizeAttributes(data) {
@@ -12,83 +12,77 @@ function normalizeAttributes(data) {
   }))
 }
 
-async function loadProfileBundle(profileId) {
-  const [profileResult, attributesResult] = await Promise.allSettled([
-    profileApi.byId(profileId),
-    profileApi.attributes(profileId),
-  ])
-
-  if (profileResult.status === 'rejected') {
-    throw profileResult.reason
-  }
-
-  return {
-    profile: profileResult.value.data,
-    attributes:
-      attributesResult.status === 'fulfilled' ? normalizeAttributes(attributesResult.value.data) : [],
-  }
-}
-
 /**
- * There is no /users/me endpoint, so the list of profiles is matched against the
- * nickname captured at sign-in. Falls back to the first profile.
+ * Attributes are a secondary resource: their failure must not block the
+ * profile itself, so the request degrades to an empty list.
  */
-function pickProfile(profiles) {
-  const nickname = readAuth()?.nickname
-  if (!nickname) return profiles[0]
+async function loadAttributes(profileId) {
+  if (profileId == null) return []
 
-  const needle = String(nickname).trim().toLowerCase()
-  const match = profiles.find(
-    (profile) => String(profile?.nickname || '').trim().toLowerCase() === needle,
-  )
-
-  return match || profiles[0]
+  try {
+    const { data } = await profileApi.attributes(profileId)
+    return normalizeAttributes(data)
+  } catch {
+    return []
+  }
 }
 
 export const useProfileStore = create((set, get) => ({
   status: 'idle',
   error: null,
-  profiles: [],
   profileId: null,
   profile: null,
   attributes: [],
 
+  /**
+   * The backend resolves the profile from the JWT (`GET /profile/get/me`), so
+   * the client no longer guesses it from the global profile list or nickname.
+   */
   async init() {
     if (get().status === 'loading') return
     set({ status: 'loading', error: null })
 
     try {
-      const { data } = await profileApi.list()
-      const profiles = Array.isArray(data) ? data : []
+      const { data: profile } = await profileApi.me()
 
-      if (profiles.length === 0) {
-        set({ profiles: [], profileId: null, profile: null, attributes: [], status: 'empty' })
+      if (profile?.id == null) {
+        set({ profileId: null, profile: null, attributes: [], status: 'empty', error: null })
         return
       }
 
-      const chosen = pickProfile(profiles)
-      const bundle = await loadProfileBundle(chosen.id)
+      const attributes = await loadAttributes(profile.id)
 
       set({
-        profiles,
-        profileId: chosen.id,
-        profile: bundle.profile,
-        attributes: bundle.attributes,
+        profileId: profile.id,
+        profile,
+        attributes,
         status: 'ready',
         error: null,
       })
     } catch (error) {
+      // No profile for the account yet: show the explicit empty state instead
+      // of falling back to another user's profile.
+      if (error?.response?.status === 404) {
+        set({ status: 'empty', error: null, profileId: null, profile: null, attributes: [] })
+        return
+      }
+
       set({ status: 'error', error: getErrorMessage(error) })
     }
   },
 
   async refresh() {
-    const { profileId } = get()
-    if (!profileId) return
+    if (!get().profileId) return
 
     try {
-      const bundle = await loadProfileBundle(profileId)
-      set({ profile: bundle.profile, attributes: bundle.attributes })
+      const { data: profile } = await profileApi.me()
+      const attributes = await loadAttributes(profile?.id ?? get().profileId)
+
+      set({
+        profileId: profile?.id ?? get().profileId,
+        profile,
+        attributes,
+      })
     } catch (error) {
       set({ error: getErrorMessage(error) })
     }

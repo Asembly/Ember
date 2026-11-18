@@ -45,7 +45,6 @@ function resetWorkspace() {
   useProfileStore.setState({
     status: 'idle',
     error: null,
-    profiles: [],
     profileId: null,
     profile: null,
     attributes: [],
@@ -63,6 +62,7 @@ function resetWorkspace() {
     status: 'idle',
     error: null,
     sessions: [],
+    historyProfileId: null,
     activeByTask: {},
     busyTaskId: null,
   })
