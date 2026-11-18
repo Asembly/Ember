@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>asembly</groupId>
-	<artifactId>ember</artifactId>
+	<artifactId>talis</artifactId>
 	<version>0.0.1</version>
 	<name/>
 	<description/>

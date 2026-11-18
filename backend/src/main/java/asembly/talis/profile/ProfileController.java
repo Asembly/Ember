@@ -1,0 +1,57 @@
+package asembly.talis.profile;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import asembly.talis.profile.dto.ProfileResponseDto;
+import asembly.talis.profile.dto.StatResponseDto;
+import asembly.talis.profile.profile_attributes.ProfileAttributeService;
+import asembly.talis.user.User;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * ProfileController
+ */
+@RestController
+@RequestMapping("/profile")
+@RequiredArgsConstructor
+public class ProfileController {
+
+    private final ProfileService profileService;
+    private final ProfileAttributeService profileAttributeService;
+
+    @GetMapping("/get")
+    public ResponseEntity<List<ProfileResponseDto>> getAll() {
+        return ResponseEntity.ok(profileService.getAll());
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<ProfileResponseDto> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(profileService.getById(id));
+    }
+
+    @GetMapping("/get/{id}/attribute")
+    public ResponseEntity<List<StatResponseDto>> getAttributesByProfileId(@PathVariable("id") Long profileId) {
+        return ResponseEntity.ok(profileAttributeService.getAttributesByProfileId(profileId));
+    }
+
+    @GetMapping("/get/leaderboard")
+    public ResponseEntity<List<ProfileResponseDto>> getLeaderBoard(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer limit) {
+        return ResponseEntity.ok(profileService.getLeaderBoard(page, limit));
+    }
+
+    @GetMapping("/get/me")
+    public ResponseEntity<ProfileResponseDto> me(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(profileService.getByUserId(user.getId()));
+    }
+
+}
