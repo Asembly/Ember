@@ -22,6 +22,5 @@ public abstract class NamedEntity extends BaseEntity {
     @Column(nullable = false)
     String name;
 
-    @Column(nullable = false)
     String description;
 }

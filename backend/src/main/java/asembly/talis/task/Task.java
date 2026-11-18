@@ -14,7 +14,6 @@ import asembly.talis.profile.Profile;
 import asembly.talis.tag.Tag;
 import asembly.talis.time_session.TimeSession;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -49,7 +48,6 @@ public class Task extends NamedEntity {
     private StatusTask status = StatusTask.OPEN;
 
     @Builder.Default
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty = Difficulty.EASY;
 

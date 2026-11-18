@@ -33,10 +33,10 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
-                .nickname(request.getNickname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .nickname(request.nickname())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
+                .role(request.role())
                 .build();
 
         var savedUser = userService.create(user);
