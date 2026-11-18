@@ -29,7 +29,7 @@ CREATE TABLE profile (
 CREATE TABLE attribute (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
-    description VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
     level_coefficient NUMERIC(10, 4) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -48,7 +48,7 @@ CREATE TABLE profile_attributes (
 CREATE TABLE action (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
     base_xp NUMERIC(10, 2) NOT NULL DEFAULT 10.00,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -65,7 +65,7 @@ CREATE TABLE action_attributes (
 CREATE TABLE tag (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
     color VARCHAR(50) NOT NULL,
     profile_id BIGINT REFERENCES profile(id) ON DELETE CASCADE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -74,7 +74,7 @@ CREATE TABLE tag (
 CREATE TABLE task (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
     status VARCHAR(50) NOT NULL DEFAULT 'OPEN',
     difficulty VARCHAR(50) NOT NULL DEFAULT 'EASY',
     deadline TIMESTAMP,
