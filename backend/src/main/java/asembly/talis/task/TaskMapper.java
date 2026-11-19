@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import asembly.talis.tag.Tag;
 import asembly.talis.task.dto.TaskResponseDto;
 
 /**
@@ -12,17 +13,17 @@ import asembly.talis.task.dto.TaskResponseDto;
 @Mapper(componentModel = "spring")
 public abstract class TaskMapper {
 
-    private TaskRewardCalculator rewardCalculator;
-
     @Autowired
-    public void setRewardCalculator(TaskRewardCalculator rewardCalculator) {
-        this.rewardCalculator = rewardCalculator;
-    }
+    protected TaskRewardCalculator rewardCalculator;
 
-    public TaskRewardCalculator getRewardCalculator() {
-        return rewardCalculator;
-    }
-
-    @Mapping(target = "potentialXp", expression = "java(getRewardCalculator().calculatePotentialXp(task))")
+    @Mapping(target = "potentialXp", expression = "java(rewardCalculator.calculatePotentialXp(task))")
+    @Mapping(target = "tagsId", source = "tags")
     public abstract TaskResponseDto toTaskResponse(Task task);
+
+    protected Long map(Tag tag) {
+        if (tag == null) {
+            return null;
+        }
+        return tag.getId();
+    }
 }

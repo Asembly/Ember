@@ -5,7 +5,15 @@ import { parseServerDate } from '../lib/format'
 
 function normalizeTask(task) {
   if (!task || typeof task !== 'object') return null
-  return { ...task, potentialXp: Number(task.potentialXp) || 0 }
+
+  return {
+    ...task,
+    potentialXp: Number(task.potentialXp) || 0,
+    // The backend now returns the task -> tag ids link directly.
+    tagsId: Array.isArray(task.tagsId)
+      ? task.tagsId.map(Number).filter(Number.isFinite)
+      : [],
+  }
 }
 
 function normalizeTasks(data) {

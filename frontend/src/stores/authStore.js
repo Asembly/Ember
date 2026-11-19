@@ -6,7 +6,6 @@ import { usePomodoroStore } from './pomodoroStore'
 import { useProfileStore } from './profileStore'
 import { useSessionStore } from './sessionStore'
 import { useTaskStore } from './taskStore'
-import { useTaskTagStore } from './taskTagStore'
 
 function decodeJwt(token) {
   try {
@@ -66,7 +65,6 @@ function resetWorkspace() {
     activeByTask: {},
     busyTaskId: null,
   })
-  useTaskTagStore.setState({ map: {} })
   usePomodoroStore.setState({
     phase: 'focus',
     taskId: null,

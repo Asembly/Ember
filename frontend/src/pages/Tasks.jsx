@@ -15,7 +15,6 @@ import {
 import { useProfileStore } from '../stores/profileStore'
 import { useSessionStore } from '../stores/sessionStore'
 import { useTaskStore } from '../stores/taskStore'
-import { useTaskTagStore } from '../stores/taskTagStore'
 import { notify } from '../stores/toastStore'
 import { DIFFICULTY_FILTERS, STATUS_FILTERS, tagColorHex } from '../lib/meta'
 import { getErrorMessage } from '../api/client'
@@ -30,8 +29,6 @@ export default function Tasks() {
     const tags = useTaskStore((state) => state.tags)
     const pendingTaskId = useTaskStore((state) => state.pendingTaskId)
     const status = useTaskStore((state) => state.status)
-
-    const tagMap = useTaskTagStore((state) => state.map)
 
     const activeByTask = useSessionStore((state) => state.activeByTask)
     const busyTaskId = useSessionStore((state) => state.busyTaskId)
@@ -50,7 +47,7 @@ export default function Tasks() {
         const byId = new Map(tags.map((tag) => [Number(tag.id), tag]))
 
         return tasks.map((task) => {
-            const ids = tagMap[task.id] || []
+            const ids = Array.isArray(task.tagsId) ? task.tagsId : []
             const taskTags = ids
                 .map((id) => byId.get(Number(id)))
                 .filter(Boolean)
@@ -58,7 +55,7 @@ export default function Tasks() {
 
             return { ...task, tags: taskTags }
         })
-    }, [tasks, tags, tagMap])
+    }, [tasks, tags])
 
     const filtered = useMemo(() => {
         const needle = query.trim().toLowerCase()
@@ -89,21 +86,11 @@ export default function Tasks() {
     async function handleCreate(payload) {
         const tagsId = Array.isArray(payload.tagsId) ? payload.tagsId.map(Number) : []
 
-        const result = await useTaskStore.getState().createTask({
+        await useTaskStore.getState().createTask({
             ...payload,
             tagsId,
             profileId,
         })
-
-        let created = result?.id != null ? result : result?.data ?? null
-        if (!created || created.id == null) {
-            const list = useTaskStore.getState().tasks
-            created = [...list].reverse().find((task) => task.name === payload.name) || null
-        }
-
-        if (created?.id != null) {
-            useTaskTagStore.getState().assign(created.id, tagsId)
-        }
 
         notify('Задача создана', 'success')
     }

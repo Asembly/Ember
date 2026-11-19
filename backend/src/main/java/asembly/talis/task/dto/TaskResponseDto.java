@@ -2,6 +2,7 @@ package asembly.talis.task.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import asembly.talis.common.enums.Difficulty;
 import asembly.talis.common.enums.StatusTask;
@@ -19,5 +20,6 @@ public record TaskResponseDto(
         LocalDateTime deadline,
         LocalDateTime finishedAt,
         LocalDateTime scheduledAt,
-        BigDecimal potentialXp) {
+        BigDecimal potentialXp,
+        List<Long> tagsId) {
 }

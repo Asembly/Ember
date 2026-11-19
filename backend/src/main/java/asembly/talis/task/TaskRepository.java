@@ -17,7 +17,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("select t from Task t where t.profile.id = :profileId and t.status = :status")
     public List<Task> findAllByProfileIdAndStatus(Long profileId, StatusTask status);
 
-    @Query("select t from Task t where t.profile.id = :profileId")
+    @Query("select t from Task t join t.tags where t.profile.id = :profileId")
     public List<Task> findAllByProfileId(Long profileId);
 
     long countByProfileIdAndStatus(Long profileId, StatusTask status);
