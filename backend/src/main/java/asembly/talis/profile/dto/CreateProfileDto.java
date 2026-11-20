@@ -6,5 +6,5 @@ import jakarta.validation.constraints.NotNull;
  * CreateProfileDto
  */
 public record CreateProfileDto(
-        @NotNull(message = "Пользователен обязателен") Long userId) {
+        @NotNull(message = "{validation.userId.notnull}") Long userId) {
 }

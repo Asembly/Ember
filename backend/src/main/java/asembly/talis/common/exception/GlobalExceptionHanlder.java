@@ -96,7 +96,7 @@ public class GlobalExceptionHanlder {
         response.put("timestamp", LocalDateTime.now());
         response.put("status", HttpStatus.UNAUTHORIZED.value());
         response.put("error", "Unauthorized");
-        response.put("message", "Неверный email или пароль");
+        response.put("message", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }

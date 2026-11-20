@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import asembly.talis.tag.dto.CreateTagDto;
 import asembly.talis.tag.dto.TagResponseDto;
+import jakarta.validation.Valid;
 
 /**
  * TagController
@@ -27,7 +28,7 @@ public class TagController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<TagResponseDto> create(@RequestBody CreateTagDto dto) {
+    public ResponseEntity<TagResponseDto> create(@Valid @RequestBody CreateTagDto dto) {
         return ResponseEntity.ok(tagService.create(dto));
     }
 

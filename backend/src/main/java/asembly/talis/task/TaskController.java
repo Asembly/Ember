@@ -15,6 +15,7 @@ import asembly.talis.task.dto.ChangeDifficultyDto;
 import asembly.talis.task.dto.CreateTaskDto;
 import asembly.talis.task.dto.TaskResponseDto;
 import asembly.talis.time_session.dto.TimeSessionResponseDto;
+import jakarta.validation.Valid;
 
 /**
  * TaskController
@@ -40,7 +41,7 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<TaskResponseDto> create(@RequestBody CreateTaskDto dto) {
+    public ResponseEntity<TaskResponseDto> create(@Valid @RequestBody CreateTaskDto dto) {
         return ResponseEntity.ok(taskService.create(dto));
     }
 
@@ -65,7 +66,7 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/difficulty")
-    public ResponseEntity<TaskResponseDto> changeDifficulty(@RequestBody ChangeDifficultyDto dto) {
+    public ResponseEntity<TaskResponseDto> changeDifficulty(@Valid @RequestBody ChangeDifficultyDto dto) {
         return ResponseEntity.ok(taskService.changeDifficulty(dto));
     }
 

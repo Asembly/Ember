@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import asembly.talis.user.dto.ChangePasswordRequest;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("users")
@@ -22,7 +23,7 @@ public class UserController {
 
     @PatchMapping("/password")
     public ResponseEntity<?> changePassword(
-            @RequestBody ChangePasswordRequest request,
+            @Valid @RequestBody ChangePasswordRequest request,
             Principal connectedUser) {
         userService.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();

@@ -7,6 +7,6 @@ import jakarta.validation.constraints.NotNull;
  * ChangeDifficultyDto
  */
 public record ChangeDifficultyDto(
-        @NotNull(message = "Сложность обязательна") Difficulty difficulty,
-        @NotNull(message = "Задача обязательна") Long id) {
+        @NotNull(message = "{validation.difficulty.notnull}") Difficulty difficulty,
+        @NotNull(message = "{validation.id.notnull}") Long id) {
 }

@@ -1,16 +1,9 @@
 package asembly.talis.auth.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class AuthenticationRequest {
+public record AuthenticationRequest(
+        @NotBlank(message = "{validation.email.notblank}") String email,
 
-    private String email;
-    String password;
+        @NotBlank(message = "{validation.password.notblank}") String password) {
 }

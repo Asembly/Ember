@@ -6,15 +6,15 @@ services:
     container_name: talis-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${DB_NAME:-db}
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "${DB_PORT:-5433}:5432"
+      - "${DB_PORT}:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-db}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 5s
       timeout: 5s
       retries: 12
@@ -26,19 +26,21 @@ services:
       dockerfile: Dockerfile
     container_name: talis-backend
     restart: unless-stopped
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME:-db}
-      SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-postgres}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_JPA_SHOW_SQL: "false"
-      APPLICATION_SECURITY_JWT_SECRETKEY: ${JWT_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-      APPLICATION_SECURITY_JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
-      APPLICATION_SECURITY_JWT_REFRESHTOKEN_EXPIRATION: ${JWT_REFRESH_EXPIRATION:-604800000}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      JWT_TOKEN_EXPIRATION: ${JWT_TOKEN_EXPIRATION}
     ports:
-      - "${API_PORT:-8080}:8080"
+      - "${API_PORT}:8080"
     develop:
       watch:
         - action: rebuild
@@ -49,13 +51,13 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: ${VITE_API_URL:-/api/v1}
+        VITE_API_URL: ${BASE_URL}
     container_name: talis-frontend
     restart: unless-stopped
     depends_on:
       - backend
     ports:
-      - "${WEB_PORT:-5173}:80"
+      - "${WEB_PORT}:80"
     healthcheck:
       test: ["CMD-SHELL", "wget -q -T 3 -O /dev/null http://127.0.0.1/healthz || exit 1"]
       interval: 15s

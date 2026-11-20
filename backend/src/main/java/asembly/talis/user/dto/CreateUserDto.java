@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
  * CreateUserDto
  */
 public record CreateUserDto(
-        @NotBlank(message = "Никнейм обязателен") @Size(min = 4, max = 30, message = "Никнейм должен быть от 2 до 30 символов") String nickname,
-        @NotBlank(message = "Email обязателен") @Email(message = "Некорректный формат email") String email,
-        @NotBlank(message = "Пароль обязателен") @Size(min = 8, max = 72, message = "Пароль должен быть от 8 до 100 символов") String password) {
+        @NotBlank(message = "{validation.nickname.notblank}") @Size(min = 4, max = 30, message = "{validation.nickname.size}") String nickname,
+        @NotBlank(message = "{validation.email.notblank}") @Email(message = "{validation.email.invalid}") String email,
+        @NotBlank(message = "{validation.password.notblank}") @Size(min = 8, max = 72, message = "{validation.password.size}") String password) {
 }

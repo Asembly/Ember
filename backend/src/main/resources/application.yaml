@@ -1,12 +1,15 @@
 spring:
   server: 
-    address: 0.0.0.0
+    address: ${API_ADDRESS} 
+    port: ${API_PORT}
   application:
-    name: tasks
+    name: talis
+  config:
+    import: optional:file:../.env[.properties]
   datasource:
-    url: jdbc:postgresql://localhost:5433/db
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://localhost:5433/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: none
@@ -25,10 +28,10 @@ spring:
 application:
   security:
     jwt:
-      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-      expiration: 86400000 
+      secret-key: ${JWT_SECRET_KEY}
+      expiration: ${JWT_EXPIRATION}
       refresh-token:
-        expiration: 604800000 
+        expiration: ${JWT_TOKEN_EXPIRATION}
 
 logging:
   level:
